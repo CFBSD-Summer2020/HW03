@@ -1,0 +1,21 @@
+---
+title: "HW03_US_data"
+author: "Patrick Haller"
+date: "7/17/2020"
+output: github_document
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+## HW03 US data
+
+First, I want to make sure to load ggplot2, so that it can be used for plotting later on.  
+
+
+```{r load libraries}
+library("ggplot2")
+```
+
+
