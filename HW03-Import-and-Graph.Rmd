@@ -11,33 +11,21 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
 ## Package loading
 ```{r load libraries}
 library("ggplot2")
-library("tidyverse")
-library("lubridate")
+library("readr")
 ```
 
 ## Data import and subsetting
 
-I used a table with information about the coronavirus in the US, at the state level. This is available in a [NY Times repository](https://github.com/nytimes/covid-19-data).
+I used data from a project I am working on at the moment. The table I upload here is incomplete, because the results of the projects are not published yet (we are in the process!). Here I imported data of above ground forest biomass, which is a measure of "forest cover". The data table was produced by using coordinates of count stations (for birds) that we visited and then using a raster layer from [Baccini et al 2017](https://science.sciencemag.org/content/early/2017/09/27/science.aam5962?versioned=true) to extract the above ground forest biomass for each of the coordinates. I extracted these values using the raster layer at two different resolutions (30 meters and 1 km) In the data table there is also a categorical variable for habitat type
 ```{r}
-corona_by_state <- read.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv",h=T)
+biomass_URL <- "https://raw.githubusercontent.com/lcespedesarias/HW03/master/Arremon/Physical_condition.csv"
+biomass <- read.csv(url(arremon_URL),h=T,sep=";")
 ```
 
 Below, I made a few adjustments to the dataset. Specificically, I wanted the dates to be read as such, and created three separate columns with year, month and day. This WAS be important for making the figure.
 ```{r}
-corona_by_state$date <- as.Date(corona_by_state$date)
-
-corona_by_state = corona_by_state %>% 
-  mutate(date = ymd(date)) %>% 
-  mutate_at(vars(date), funs(year, month, day))
-
-corona_by_state$month <- as.factor(corona_by_state$month)
 ```
 
-Finally, I was only interested in the data for the states of Illinois and Arizona so I subseted the table:
-
-```{r}
-corona_ill_ari <- subset(corona_by_state,state=="Illinois"|state=="Arizona")
-```
 
 ## Figure
 
