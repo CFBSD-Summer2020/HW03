@@ -6,90 +6,92 @@ Laura Cespedes Arias
 
 ``` r
 library("ggplot2")
-library("tidyverse")
+library("readr")
+library("MASS")
 ```
 
-    ## ── Attaching packages ─────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+I decided to do a simple figure with some data I am analyzing right now.
+The data is not public yet, so I uploaded a subset of our original data
+table to make the graph. Specifically, this is data of above ground
+carbon biomass [Baccini et
+al 2017](https://science.sciencemag.org/content/early/2017/09/27/science.aam5962?versioned=true)
+corresponding to stations where we counted migratory birds in Colombia.
+For each station, we also assigned a habitat category. I wanted to
+explore if the habitat category described fairly well the variation in
+above ground biomass, which is a variable that is supposed to describe
+the amount of “tree” biomass. Therefore, is expected that forested
+habitats would have higher values than more open habitats.
 
-    ## ✓ tibble  3.0.1     ✓ dplyr   0.8.5
-    ## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
-    ## ✓ readr   1.3.1     ✓ forcats 0.4.0
-    ## ✓ purrr   0.3.4
+## Data import
 
-    ## ── Conflicts ────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
+First, I imported the data table that I previously uploaded to
+GitHub:
 
 ``` r
-library("lubridate")
+biomass_URL <- "https://raw.githubusercontent.com/lcespedesarias/HW03/master/CarbonBiomass_byHabitat.csv"
+biomass <- read.csv(url(biomass_URL),h=T,sep=";")
+head(biomass)
 ```
 
-    ## 
-    ## Attaching package: 'lubridate'
+    ##   hansen_treeD hansen_treeD_1km                        Habitat
+    ## 1           95         83.68416                   Shade_coffee
+    ## 2           95         52.32880 Forest_fragment/Riparian_strip
+    ## 3            7         69.27404                   Shade_coffee
+    ## 4           91         83.29684                   Shade_coffee
+    ## 5           86         83.29684                   Shade_coffee
+    ## 6           96         86.64510                  Mature_forest
 
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     date
-
-## Data import and subsetting
-
-I used a table with information about the coronavirus in the US, at the
-state level. This is available in a [NY Times
-repository](https://github.com/nytimes/covid-19-data).
-
-``` r
-corona_by_state <- read.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv",h=T)
-```
-
-Below, I made a few adjustments to the dataset. Specificically, I wanted
-the dates to be read as such, and created three separate columns with
-year, month and day. This WAS be important for making the figure.
+\#Adjustments in the data table Before making the figure I needed to
+reorder one variable (Habitat) and create a new category called “Habitat
+type” (which is more general/broad than “Habitat”):
 
 ``` r
-corona_by_state$date <- as.Date(corona_by_state$date)
+biomass$Habitat <- factor(biomass$Habitat, 
+                          levels = c("Mature_forest","Secondary_Growth",
+                                     "Forest_fragment/Riparian_strip",
+                                     "Shade_coffee","Sun_coffee",
+                                     "Live_Fence/Pasture","Paramo"))
 
-corona_by_state = corona_by_state %>% 
-  mutate(date = ymd(date)) %>% 
-  mutate_at(vars(date), funs(year, month, day))
+#This will be the new habitat variable
+biomass$Habitat_type[biomass$Habitat %in% c("Mature_forest","Secondary_Growth",
+                                     "Forest_fragment/Riparian_strip")] <- "Forest"
 
-corona_by_state$month <- as.factor(corona_by_state$month)
-```
+biomass$Habitat_type[biomass$Habitat %in% c("Shade_coffee","Sun_coffee")] <- "Coffee"
 
-Finally, I was only interested in the data for the states of Illinois
-and Arizona so I subseted the
-table:
-
-``` r
-corona_ill_ari <- subset(corona_by_state,state=="Illinois"|state=="Arizona")
+biomass$Habitat_type[biomass$Habitat %in% c("Live_Fence/Pasture","Paramo")] <- "Open"
 ```
 
 ## Figure
 
-I was interested in visualizing the number of cases per month and per
-state. So, this is what I
+Now the figure. So, what I wanted was a simple figure to show how values
+of above ground carbon biomass vary by habitat. I also wanted to
+visually group the specific habitat categories according to the “broad”
+habitat categories. Therefore, I decided to do a boxplot and color the
+boxes according to the broad habitat category. This is what I
 did:
 
 ``` r
-ggplot(corona_ill_ari,mapping = aes(x = month, y = cases, fill=state, color=state)) +
-  #To add boxes with a transparency
-  geom_boxplot(alpha=0.6) +
-  #To add points
-  geom_jitter(position = position_jitterdodge(4)) +
+ggplot(biomass,mapping = aes(x = Habitat, y = hansen_treeD_1km, fill=Habitat_type)) +
   #To change the default grey background
   theme_bw()+
+  #To add the points and boxes (boxes with no outliers)
+  geom_jitter(aes(color=Habitat_type)) +
+  geom_boxplot(alpha=0.4,outlier.colour = NA)+
+  #To add axes labels and adjust their size
+  ylab("Above ground carbon biomass") +
+  xlab("Habitat") +
+  theme(axis.text.x = element_text(color="black", size=8, angle=45,hjust=1))+
+  theme(axis.text.y = element_text(color="black", size=8))+
+  theme(axis.title = element_text(color="black", size=12))+
+  scale_x_discrete(labels=c("Mature forest","Secondary forest","Forest fragment",
+                            "Shade coffee","Sun coffee","Live fences","Paramo"))+
   #To add title and change the default size
-  ggtitle(label="Coronavirus cases by month",subtitle="For Illinois and Arizona")+
-  theme(plot.title = element_text(size = 25))+
-  #To add axes labels
-  xlab("Month (2020)") +
-  ylab("Number of cases") +
-  theme(axis.text.x = element_text(color="black", size=14, angle=45,hjust=1))+
-  theme(axis.text.y = element_text(color="black", size=10))+
-  theme(axis.title = element_text(color="black", size=20))+
-  scale_x_discrete(labels=c("January","February","March","April","May","June","July"))+
-  #To change the position of the legend and it's size
-  theme(legend.position = c(0.25, 0.7))+
-  theme(legend.title = element_text(size = 20),legend.text = element_text(size = 15))
+  ggtitle(label="Above ground forest biomass \n in different habitats")+
+  theme(plot.title = element_text(size = 15))
 ```
 
 ![](HW03-Import-and-Graph_files/figure-gfm/pressure-1.png)<!-- -->
+
+It looks like open habitats (paramo and live fences) do tend to have
+lower values of above ground carbon biomass than forested habitats
+(mature forest, secondary growth, forest fragments), as predicted :)

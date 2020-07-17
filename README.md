@@ -1,8 +1,5 @@
 # HW03
-Hi!
 
-I decided to go with Idea #2 and made a simple graph with coronavirus data from the NYT repository. I decided to use markdown, and in the document you can see the detailed explanation of what I did. Here is the [code](https://github.com/lcespedesarias/HW03/blob/master/HW03-Import-and-Graph.Rmd) and here is the [markdown](https://github.com/lcespedesarias/HW03/blob/master/HW03-Import-and-Graph.md)
+I decided to do a simple figure with some data I am analyzing right now (not mimicking a figure that is already out there). In the markdown there is detailed information about the data set I used :)   
 
-Best,
-
-Laura
+To review: [code](https://github.com/lcespedesarias/HW03/blob/master/HW03-Import-and-Graph.Rmd) and here is the [markdown](https://github.com/lcespedesarias/HW03/blob/master/HW03-Import-and-Graph.md)
