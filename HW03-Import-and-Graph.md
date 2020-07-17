@@ -41,9 +41,11 @@ head(biomass)
     ## 5           86         83.29684                   Shade_coffee
     ## 6           96         86.64510                  Mature_forest
 
-\#Adjustments in the data table Before making the figure I needed to
-reorder one variable (Habitat) and create a new category called “Habitat
-type” (which is more general/broad than “Habitat”):
+## Adjustments in the data table
+
+Before making the figure I needed to reorder one variable (Habitat) and
+create a new category called “Habitat type” (which is more general/broad
+than “Habitat”):
 
 ``` r
 biomass$Habitat <- factor(biomass$Habitat, 
