@@ -27,7 +27,7 @@ biomass <- read.csv(url(biomass_URL),h=T,sep=";")
 head(biomass)
 ```
 
-#Adjustments in the data table
+## Adjustments in the data table
 Before making the figure I needed to reorder one variable (Habitat) and create a new category called "Habitat type" (which is more general/broad than "Habitat"):
 
 ```{r}
