@@ -11,5 +11,5 @@ The data I used come from two separate FPLC runs: both correspond to the same pa
 
 The code's very simple. One thing worth mentioning is that I ended up using fread() function to import the workbook (I learned about it from DataCamp) that requires installation of "data.table" package.
 
-Here's the acces to the [code](https://github.com/violecule/HW03/blob/master/Script%20for%20AKTA%20plots.Rmd) and the plot.
+Here's the acces to the [code](https://github.com/violecule/HW03/blob/master/FPLC-chromatogram.md) and the plot.
 
