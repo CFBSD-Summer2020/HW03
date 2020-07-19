@@ -3,6 +3,10 @@ title: "FPLC chromatogram"
 output: github_document
 ---
 
+```{r global_options}
+knitr::opts_chunk$set(fig.path='Figs/')
+```
+
 ## Seting working directory.
 ```{r}
 
