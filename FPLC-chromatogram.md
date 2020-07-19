@@ -5,7 +5,7 @@ FPLC chromatogram
 knitr::opts_chunk$set(fig.path='Figs/')
 ```
 
-## Seting working directory.
+## Setting working directory.
 
 ``` r
 setwd("~/Desktop/GitHub/Homework_3")
