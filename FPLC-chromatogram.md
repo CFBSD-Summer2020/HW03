@@ -1,6 +1,10 @@
 FPLC chromatogram
 ================
 
+``` r
+knitr::opts_chunk$set(fig.path='Figs/')
+```
+
 ## Seting working directory.
 
 ``` r
@@ -72,4 +76,4 @@ ggplot(workbook, aes(x = SPRml, y = SPRuv, color = Complex)) +
 
     ## Warning: Removed 33967 rows containing missing values (geom_point).
 
-![](FPLC-chromatogram_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](Figs/unnamed-chunk-4-1.png)<!-- -->
