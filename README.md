@@ -1,4 +1,14 @@
 # HW03
+#For this week's homework, I am attempting to graph some qPCR data that I generated in lab. The most important part of this for me is that I can overlay the individual biological replicates as points on top of a bar plot that represents the average of the biological replicates.
+
+#This directory should include an excel file "Dataframe_of_qPCR_data_for_HW3.xlsx", from which I will copy the data to my clipboard and read into R
+
+#This directory should also include an Rscript file "Graphing_qPCR_data.R", where I run the code to produce the graph "qPCR-Graph.png".
+
+#Thanks for stopping by!
+
+#Below are the original homework instructions for reference.
+
 ## Assignment
 Read in some data and graph something in R
 
