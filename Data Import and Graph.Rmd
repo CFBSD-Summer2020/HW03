@@ -1,0 +1,43 @@
+---
+title: "Data Import and Graph"
+author: "Patrick Cantwell"
+date: "7/18/2020"
+output: html_document
+---
+
+```{r packages}
+library("ggplot2")
+library("readr")
+library("readxl")
+library("httr")
+```
+
+This code will download Covid-19 data from all counties in the United States from The New York Times' GitHub page and name the data.
+
+```{r NYT Covid County Data}
+nyt_covid_county <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv", col_names = TRUE)
+
+```
+
+This downloads a .xlsx file from the U.S. Census for Texas county populations and pop. predictions from 2010 to 2019.
+*The code was modified from a Stack Overflow post by user "lukeA" 
+```{r Texas Census Data}
+texas_url <- "https://www2.census.gov/programs-surveys/popest/tables/2010-2019/counties/totals/co-est2019-annres-48.xlsx"
+GET(texas_url, write_disk(tf <- tempfile(fileext = ".xlsx")))
+column_names_tx <- c("Geographic Area", "Census", "Estimates Base", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+df <- read_excel(tf, skip = 4, col_names = column_names_tx)
+
+```
+
+
+```{r}
+covid_texas <- subset(nyt_covid_county, state == "Texas") #subset of nyt_covid_county that includes only data from Texas
+```
+
+
+
+```{r}
+ggplot(covid_texas, aes(cases)) +
+  geom_histogram()
+```
+
