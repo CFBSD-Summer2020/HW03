@@ -2,7 +2,9 @@
 title: "HW3_CovidData"
 author: "Olubusayo Bolonduro"
 date: "7/19/2020"
-output: html_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
