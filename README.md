@@ -1,5 +1,5 @@
 # HW03
-## Assignment
+## Explanation
 
 Sorry for the simplicity of the plot. This actually is for my lab meeting on Tuesday (I hid the names of the proteins I'm working with though!).
 
