@@ -1,45 +1,50 @@
----
-title: "HW03_US_data"
-author: "Patrick Haller"
-date: "7/17/2020"
-output: github_document
----
+HW03\_US\_data
+================
+Patrick Haller
+7/17/2020
 
-```{r setup, include=TRUE}
+``` r
 knitr::opts_chunk$set(echo = TRUE, error = TRUE)
 ```
 
 ## HW03 Patrick Haller
 
-**First things first, I want to make sure to load ggplot2, so that it can be used for plotting later on.**  
+**First things first, I want to make sure to load ggplot2, so that it
+can be used for plotting later on.**
 
-```{r load libraries}
+``` r
 library("ggplot2")
 ```
 
-**For this assignment, my goal is to make some graphs illustrating the progression of COVID cases in the U.S. over time. For this, I went to the NY Time's github repository and downloaded their raw data on the total number of cases and deaths in the U.S. since the first reported case on 01/21/2020. Next, I uploaded the .csv file of the data (named: us.csv) to my repository for HW03 and read it in from there:**   
+**For this assignment, my goal is to make some graphs illustrating the
+progression of COVID cases in the U.S. over time. For this, I went to
+the NY Time’s github repository and downloaded their raw data on the
+total number of cases and deaths in the U.S. since the first reported
+case on 01/21/2020. Next, I uploaded the .csv file of the data (named:
+us.csv) to my repository for HW03 and read it in from there:**
 
 ### Importing data
 
-```{r, echo = TRUE}
+``` r
 # read in data from us.csv file
 US_data <- read.csv("us.csv", stringsAsFactors = FALSE)
-
 ```
 
-**Here, the values in the "date" column are stored as *character (chr)* values. However, we can also store them to *date* values, using the `as.Date()` function:**
+**Here, the values in the “date” column are stored as *character (chr)*
+values. However, we can also store them to *date* values, using the
+`as.Date()` function:**
 
-```{r read in data, echo = TRUE}
+``` r
 # convert from chr values to date values
 US_data$date <- as.Date(US_data$date, format = "%Y-%m-%d")
-
 ```
 
-**Using this data, I wanted to plot the total number of cases and deaths in the United States over time:**    
+**Using this data, I wanted to plot the total number of cases and deaths
+in the United States over time:**
 
-### Graph #1
+### Graph \#1
 
-```{r graph 1, echo = TRUE, include = TRUE} 
+``` r
 # the scales package will help with formatting the x-axis
 library(scales)
 
@@ -60,23 +65,40 @@ ggplot(data = US_data) +
   annotate("text", x = as.Date("2020-02-02", "%Y-%m-%d"), y = 3000000, label = "Deaths =") +
   annotate("text", x = as.Date("2020-02-20", "%Y-%m-%d"), y = 3000000, label = "red", color = "red") +
   annotate("rect", xmin = as.Date("2020-01-21", "%Y-%m-%d"), xmax = as.Date("2020-02-27", "%Y-%m-%d"), ymin = 2800000, ymax = 3400000, color = "grey", alpha = 0.2)
-  
- 
 ```
 
-**Additionally, instead of just plotting the total number of cases/deaths, I also wanted to plot the number of cases/deaths per day. For this, I created two new variables, showing only the number of new cases *(named: diff_cases)* and deaths *(named: diff_deaths)* each day using the `lead()` function of the dplyr package:**
+![](HW03_US_data_files/figure-gfm/graph%201-1.png)<!-- -->
 
-```{r create new variables, echo = TRUE, include = TRUE} 
+**Additionally, instead of just plotting the total number of
+cases/deaths, I also wanted to plot the number of cases/deaths per day.
+For this, I created two new variables, showing only the number of new
+cases *(named: diff\_cases)* and deaths *(named: diff\_deaths)* each day
+using the `lead()` function of the dplyr package:**
+
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 # add variables for cases per day and deaths per day
 US_data$diff_cases <- lead(US_data$cases, 1) - US_data$cases
 US_data$diff_deaths <- lead(US_data$deaths, 1) - US_data$deaths
-
 ```
 
-### Graph #2
+### Graph \#2
 
-```{r graph 2, echo = TRUE, include = TRUE}
+``` r
 ggplot(data = US_data) + 
   # separately adding geom_col() layers for covid cases and deaths
   geom_col(aes(x = date, y = diff_cases), color = "blue", fill = "blue", alpha = 0.2) +
@@ -94,7 +116,10 @@ ggplot(data = US_data) +
   annotate("text", x = as.Date("2020-02-02", "%Y-%m-%d"), y = 60000, label = "Deaths =") +
   annotate("text", x = as.Date("2020-02-20", "%Y-%m-%d"), y = 60000, label = "red", color = "red") +
   annotate("rect", xmin = as.Date("2020-01-21", "%Y-%m-%d"), xmax = as.Date("2020-02-27", "%Y-%m-%d"), ymin = 56000, ymax = 68000, color = "grey", alpha = 0.2)
-
 ```
 
+    ## Warning: Removed 1 rows containing missing values (position_stack).
+    
+    ## Warning: Removed 1 rows containing missing values (position_stack).
 
+![](HW03_US_data_files/figure-gfm/graph%202-1.png)<!-- -->
