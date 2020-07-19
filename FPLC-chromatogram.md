@@ -28,7 +28,7 @@ library(ggplot2)
 workbook <- fread("AKTA.csv")
 ```
 
-## Make the plot.
+## Making the plot.
 
 ``` r
 #Making the plot.
