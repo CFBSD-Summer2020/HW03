@@ -1,0 +1,49 @@
+---
+title: "LaiWei_HW03"
+author: "Lai"
+date: "7/20/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+## Introduction
+
+In this Rmd document, I will practice plotting using the COVID-19 dataset cloned from the repository of New York Times.
+
+```{r load libraries}
+library(ggplot2)
+library(dplyr)
+```
+
+## Reading in data and plotting
+
+In this assignment, I used "us.csv", which contains the COVID-19 case, and death numbers in the US since Jan. 21st, 2020.
+
+```{r, echo=FALSE}
+us_cases = read.csv('us.csv',
+                    stringsAsFactors = FALSE)
+us_cases$date<-as.Date(us_cases$date)
+ggplot(us_cases, aes(x = date, group = 1)) +
+  geom_area(aes(y = cases), fill = 'red', alpha = 0.4) + 
+  scale_y_continuous(
+    "Cases / million", 
+    breaks = c(0e+00, 1e+06, 2e+06, 3e+06), 
+    labels = c('0', '1', '2', '3'), 
+    sec.axis = sec_axis(~.*0.1, name="Deaths / million",
+                        breaks = c(0e+00, 1e+05, 2e+05, 3e+05), 
+                        labels = c('0', '0.1', '0.2', '0.3'))) +
+  geom_area(aes(y = deaths*10), fill = 'grey60', alpha = 0.6) +
+  labs(title = element_text('Case and Death Numbers of COVID-19 in the US (January - July)')) +
+  theme(panel.background = element_blank(),
+        axis.line = element_line(),
+        axis.text.x = element_text(angle = 45, vjust = 0.5),
+        plot.title = element_text(hjust = 0.5)
+  ) +
+  scale_x_date(date_break = "20 days")
+  
+  
+```
+
