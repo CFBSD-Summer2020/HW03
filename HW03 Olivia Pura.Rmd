@@ -1,0 +1,69 @@
+---
+title: "HW03 Olivia Pura"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+To start, I'm loading in the ggplot2 and readr packages.
+
+```{r packages, warning=FALSE}
+library("ggplot2")
+library("readr")
+library("dplyr")
+```
+
+I will be working with the NYT COVID-19 dataset, "us-states.csv". I forked this dataset from the NYT repository and uploaded them into my own.
+
+```{r data}
+state_data <- read.csv("us-states.csv", stringsAsFactors = FALSE)
+```
+
+## Graph 1
+
+My first graph will evaluate the total cases and deaths over time in Illinois.
+
+```{r graph1, echo=TRUE}
+# filtering the dataset for Illinois data
+il_data <- filter(state_data, state == "Illinois")
+
+# formatting the date column using the as.Date() function for graph formatting
+il_data$date <- format.Date(il_data$date, format = "%m/%d/%Y")
+
+# dividing the count of deaths and cases by 1,000 for cleaner axis
+il_data$cases <- il_data$cases/1000
+il_data$deaths <- il_data$deaths/1000
+
+# creating the basic column chart to display cases over time
+ggplot(il_data) +
+  geom_col(aes(x = date, y = cases), fill = "navyblue", alpha = 0.4, width = 0.7) +
+  geom_col(aes(x = date, y = deaths), fill = "orange", alpha = 0.6, width = 0.7) + 
+  
+# formating axis labels to make graph legible
+  #scale_x_date(name = "Date")  +
+  scale_y_continuous(name = "Count (thousands)", limits = c(0, 170), 
+                     breaks = seq(0, 170, 20),
+                     minor_breaks = seq(0, 170, 10)) +
+  
+# adding a title and subtitle
+  labs(title = "COVID-19 in Illinois", subtitle = "Total Number of Cases and Deaths Since First-Reported Case on January 24, 2020") +
+  
+# making the plot nicer
+   theme(plot.subtitle = element_text (hjust = 0.5),
+         plot.title = element_text(hjust = 0.5),
+         axis.line = element_line(color = "grey20", size = 0.3),
+         axis.text.x = element_text(angle = 45, hjust=1, size = 7),
+         panel.grid.major = element_line(color = "grey92", size = .2), 
+         panel.background = element_blank()) 
+```
+
+## Graph 2
+
+My second graph will evaluate the number of new cases each day, also in Illinois
+
+```{r graph2, echo=TRUE}
+il_daily_data <- filter(state_data, state == "Illinois")
+il_daily_data$new_cases <- il_daily_data$cases - lag(il_daily_data$cases, 1)
+```
