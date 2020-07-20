@@ -34,3 +34,28 @@ Idea #2: There are a ton of statistics on COVID cases and the increase over time
 Idea #3: Gapminder is a common dataset for students to explore [here](https://www.gapminder.org/data/). It has data on countries. E.g. wealth, child mortality, access to electricity, etc. and the data may suprise you. They even made a [TED talk about it](https://www.gapminder.org/ignorance/)
 
 Idea #4: Explore [some census data](https://www.census.gov/data/datasets.html) or some survey data from the CDC. The CDC conducts 2 annual surveys the [Behavioral Risk Factor Surveillance System (BRFSS)](https://www.cdc.gov/brfss/about/index.htm) and [National Health and Nutrition Examination Survey (NHANES)](https://www.cdc.gov/nchs/nhanes/about_nhanes.htm). The BRFSS is conducted as a yearly phone survey of 400,000 adults, with data going back to 1995. The NHANES is unique in that it has a physical examination portion instead of self-reported data, but because of this, it only contains data on 5,000 people per year. Both are great potential datasets for those interested in health as the CDC uses this data to calculate prevelance rates on things from happiness to smoking to obesity. (These data might not be in the best format for graphing and will likely require some formatting to be able to plot in ggplot).
+
+## HW03 making scatter plot for differential expression data
+#loading packages
+```{r}
+ library("ggplot2")
+ library("tidyverse")
+ ```
+# setting working directory
+```{r}
+ setwd("~/Desktop")
+ ```
+# uploaded data to github
+## coding for the plot
+
+filename <- "https://github.com/zeeshanb-github/protIncExc/blob/master/protIncExcList.txt"
+my_data <- read.delim(filename, header=TRUE)
+phb <- subset(my_data, Genes == "PHB3")# subset data
+ggplot(my_data, aes(x=Genes, y=Log2_Mut_vs_WT, color = ifelse( Log2_Mut_vs_WT < -0.33, "Fail", "Pass"))) + #gradient color of differentially regulated genes
+  geom_point(alpha=0.5)+   # this is the base plot
+  geom_point(phb,mapping = aes(color="green")) +  # this adds a red point
+  geom_text(phb, mapping=aes(label="PHB3", hjust=0.5, vjust=-0.5))+ # this adds a label for the red point
+  theme_classic()+
+  theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())+
+  theme(legend.position="none")+ geom_hline(yintercept=-0.33, linetype="dashed", color = "red")
+
