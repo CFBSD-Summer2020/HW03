@@ -1,0 +1,128 @@
+---
+title: "HW03"
+author: "Maria Evers"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+
+## Homework 3: Graphing your own data
+### I will be graphing data from an intracellular ATP assay performed on H1299 NSCLC cells treated with various concentrations of ATP
+### Cancer cells are able to take up ATP from their extracellular environment via a process called **macropinocytosis**, significantly increasing intracellular ATP levels 
+#### The ATP assay utilized uses a firefly luciferase system to measure the amount of ATP present in biological samples, in this case H1299 cell lysate. Luminescence is measured and is directly proportional to the amount of ATP present. 
+
+```
+#Loading in packages
+```{r}
+
+library(ggplot2)
+library(readxl)
+
+#Loading in the excel file from my documents
+
+ATP <- read_excel("~/Documents/H1299.iATP.assays.xlsx", 
+    sheet = "data for R", col_types = c("numeric", 
+        "numeric", "numeric", "numeric", 
+        "numeric"))
+
+#Previewing the structure of my dataset
+
+str(ATP)
+
+#Plotting standard graph with ggplot2
+
+ggplot(ATP, aes(x = factor(ATP_concentration), y = normalized_average)) +
+  geom_col(width = .5, color = "black", fill = "black") +
+  
+#Adding (visible) Error Bars to the graph 
+
+  geom_errorbar(aes(ymin = normalized_average - normalized_stdev, ymax = normalized_average + normalized_stdev), width = .2, color = "darkgray") +
+  
+#Adding axis labels 
+
+  labs(title = "Extracellular ATP internalization by H1299 NSCLC cells", x = "ATP concentration (uM)", y = "Relative intracellular ATP concentrations \n(control = 100%)") +
+  
+#Making the graph look nice 
+  
+  theme(plot.title = element_text(hjust = 0.5, size = 14), axis.text = element_text(size = 12, color = "black"), axis.title = element_text(size = 14), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line.x.bottom = element_line(color = "black"), axis.line.y.left = element_line(color = "black")) +
+  
+#Adding stars for significance (pvalue calculated in Excel). I added each manually, but I am sure there are other ways to add these using pvalues as a column in your data. 
+  
+  annotate("text", label = "*" , x = 4, y = 150, color = "black", size = 7) +
+  annotate("text", label = "*" , x = 5, y = 150, color = "black", size = 7) +
+  annotate("text", label = "***" , x = 6, y = 175, color = "black", size = 7) +
+  annotate("text", label = "**" , x = 7, y = 175, color = "black", size = 7) +
+  annotate("text", label = "**" , x = 8, y = 185, color = "black", size = 7) +
+  annotate("text", label = "***" , x = 9, y = 210, color = "black", size = 7) +
+  annotate("text", label = "***" , x = 10, y = 275, color = "black", size = 7) 
+
+
+
+```
+
+### Next, I am graphing some RNASeq Data that we would like to highlight in an upcoming publication. 
+### This data is looking at changes in A549 NSCLC cells RNA expression levels in specific EMT-related genes after treatment with ATP or TGF-B for 2 or 6 hours.
+### I think this plot needs work, but I need to produce multi-panel figures like this with RNASeq data and Metabolomics data for a publication I'm working on, so **any input on this graph specifically is greatly appreciated!**
+
+```{r}
+library(readxl)
+
+#Loading in the Excel file. I went ahead and changed my data from the "wide" format to the "long" format in excel before importing. Instead of each treatment being its own column, treatment is now a column itself.
+
+RNASeqEMT <- read_excel("~/Documents/RNA seq analysis/Diff Exp Genes accumulated data.xlsx", 
+    sheet = "R data")
+    
+#Previewing structure of the data set 
+
+str(RNASeqEMT)
+
+#Graphing the dataset into a multi-panel bar chart, unfortunately I could not reorder my treatments to the desired order (control first) 
+
+ggplot(RNASeqEMT, aes(Gene_name, log2FC, color = Treatment, fill = Treatment)) + 
+  geom_bar(aes(x = Treatment), stat = 'identity') +
+  facet_wrap(~ Gene_name) +
+  
+#Adding labels 
+
+  labs(title = "ATP and TGF-B treatment alter the transcription of several EMT \n or mesenchymal-type genes", x = element_blank(), y = "log2(FC) values") +
+  
+#Making the plot look nice
+
+  scale_color_brewer(palette = "Paired") +
+  
+  scale_fill_brewer(palette = "Paired") +
+  
+  theme_bw() +
+  
+  theme(plot.title = element_text(hjust = 0.5, size = 14), axis.text = element_text(size = 8, color = "black"), axis.title = element_text(size = 14), axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+  
+  
+
+```
+
