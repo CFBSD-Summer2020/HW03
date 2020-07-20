@@ -47,10 +47,11 @@ Idea #4: Explore [some census data](https://www.census.gov/data/datasets.html) o
  ```
 # uploaded data to github
 ## coding for the plot
-
-filename <- "https://github.com/zeeshanb-github/protIncExc/blob/master/protIncExcList.txt"
+**scatter plot with color gradient about threshold value
+```{r}
+ filename <- "https://github.com/zeeshanb-github/protIncExc/blob/master/protIncExcList.txt"
 my_data <- read.delim(filename, header=TRUE)
-phb <- subset(my_data, Genes == "PHB3")# subset data
+phb <- subset(my_data, Genes == "PHB3") # subset data
 ggplot(my_data, aes(x=Genes, y=Log2_Mut_vs_WT, color = ifelse( Log2_Mut_vs_WT < -0.33, "Fail", "Pass"))) + #gradient color of differentially regulated genes
   geom_point(alpha=0.5)+   # this is the base plot
   geom_point(phb,mapping = aes(color="green")) +  # this adds a red point
@@ -58,4 +59,8 @@ ggplot(my_data, aes(x=Genes, y=Log2_Mut_vs_WT, color = ifelse( Log2_Mut_vs_WT < 
   theme_classic()+
   theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())+
   theme(legend.position="none")+ geom_hline(yintercept=-0.33, linetype="dashed", color = "red")
+
+ ```
+
+
 
