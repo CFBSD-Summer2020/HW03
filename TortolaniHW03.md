@@ -1,42 +1,60 @@
----
-title: "HW03"
-author: "Ariana F. Tortolani"
-date: "7/20/2020"
-output: github_document
----
+HW03
+================
+Ariana F. Tortolani
+7/20/2020
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+## Description
 
-## Description 
+For this assignment I will be using the COVID-19 data from the NYT’s
+Github Repository to generate these figures.
 
-For this assignment I will be using the COVID-19 data from the NYT's Github Repository to generate these figures.
+Below I am loading important libraries that will be useful in creating
+my figures.
 
-Below I am loading important libraries that will be useful in creating my figures.
-
-```{r load libraries, echo = TRUE, include=TRUE}
+``` r
 library("ggplot2")
 library("magrittr")
 library("readr")
 library("dplyr")
 ```
 
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
 ## Import the Data
 
-I am using the us-states.cvs dataset from the NYT.  First I went to the [NYT Github Repository for COVID-19 Data](https://github.com/nytimes/covid-19-data).  I forked this repository and then downloaded the specific file I was interested in, *"us-states.csv"*.  After downloading this to my computer I then uploaded it back to my HW03 Github repository by clicking the "add file" button in github, then I pulled the change back down to RStudio to work with this file.
+I am using the us-states.cvs dataset from the NYT. First I went to the
+[NYT Github Repository for COVID-19
+Data](https://github.com/nytimes/covid-19-data). I forked this
+repository and then downloaded the specific file I was interested in,
+*“us-states.csv”*. After downloading this to my computer I then
+uploaded it back to my HW03 Github repository by clicking the “add file”
+button in github, then I pulled the change back down to RStudio to work
+with this file.
 
-QUESTION:  I was trying to find a way to add this document directly from one github repository to another (i.e. going directly from the NYT repo to my HW03 repo without having to download the file to my computer and reupload).  I was not able to find a good way to do this and was wondering if anyone else had?
+QUESTION: I was trying to find a way to add this document directly from
+one github repository to another (i.e. going directly from the NYT repo
+to my HW03 repo without having to download the file to my computer and
+reupload). I was not able to find a good way to do this and was
+wondering if anyone else had?
 
-```{r data, echo=TRUE}
+``` r
 all_states <- read.csv("us-states.csv", stringsAsFactors = FALSE)
 ```
 
-##Graph 1
+\#\#Graph 1
 
 Evaluating the prevalence of COVID-19 in Rhode Island.
 
-```{r}
+``` r
 #filter the data for only Rhode Island
 all_states %>%
   filter(state == "Rhode Island") -> RI_data
@@ -72,14 +90,15 @@ RI_plot <- ggplot(RI_data) +
 
 #show plot
 RI_plot
-
 ```
 
+![](TortolaniHW03_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
-##Graph 2
+\#\#Graph 2
 
 Compare Rhode Island to Massachusetts.
-```{r}
+
+``` r
 #filter the data for only Rhode Island
 all_states %>%
   filter(state == "Massachusetts" | state == "Rhode Island") -> MA_RI_data
@@ -117,11 +136,13 @@ MA_RI_plot <- ggplot(MA_RI_data) +
 MA_RI_plot
 ```
 
+![](TortolaniHW03_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
-##Graph 3
+\#\#Graph 3
 
 Look at number of new daily cases in Rhode Island.
-```{r}
+
+``` r
 #define new variables
 RI_data$new_cases <- lead(RI_data$cases, 1) - RI_data$cases
 RI_data$new_deaths <- lead(RI_data$deaths, 1) - RI_data$deaths
@@ -154,5 +175,10 @@ RI_new_daily_plot <- ggplot(RI_data) +
 
 #show plot
 RI_new_daily_plot
-
 ```
+
+    ## Warning: Removed 1 rows containing missing values (position_stack).
+    
+    ## Warning: Removed 1 rows containing missing values (position_stack).
+
+![](TortolaniHW03_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
