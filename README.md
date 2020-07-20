@@ -2,6 +2,8 @@
 ## Assignment
 Read in some data and graph something in R
 
+I used the [NY Times's Github Repository](https://github.com/nytimes/covid-19-data)  for COVID-19 Data and used it to generate my figures.  My code is available Rmd: [here](TortolaniHW03.Rmd) file: TortolaniHW03.Rmd or md [here](TortolaniHW03.md) file: TortolaniHW03.md.
+
 ### Is that it?
 Yep. 
 
