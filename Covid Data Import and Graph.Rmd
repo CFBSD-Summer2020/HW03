@@ -1,0 +1,39 @@
+---
+title: "Covid Data Import and Graph"
+author: "Patrick Cantwell"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r packages, include=FALSE}
+library("ggplot2")
+library("readr")
+library("readxl")
+```
+
+#Introduction
+Hi! So as the README.md says, I don't really have any personal data to practice graphing with, so I decided to go with looking at some Covid data! Totally not stressful at all.
+
+
+```{r}
+column_names_tx <- c("date", "text", "skip", "skip", "numeric", "numeric", "skip", "numeric", "numeric")
+texas_covid <- read_xlsx("us-counties covid 7-18-2020.xlsx", sheet = "texas_density_covid", col_types = column_names_tx)
+texas_covid$county <- as.factor(texas_covid$county) #this coerces the "county" column to be made up of 21 factors
+names(texas_covid)[names(texas_covid) == "cases/100,000"] <- "cases_per_ht" #this changes the name of the cases/100,000 column, as its previous name was causing difficulties
+```
+
+##Where did the data come from?
+All of the data from this Excel sheet comes from several different sources:
+*The population data comes from the U.S. Census' prediction of Texas counties, which can be found [here](https://www2.census.gov/programs-surveys/popest/tables/2010-2019/counties/totals/co-est2019-annres-48.xlsx)
+*Texas county land areas (in square miles) was taken from the Wikipedia page [here](https://en.wikipedia.org/wiki/List_of_counties_in_Texas)
+*Most importantly, the Covid-19 data comes from The New York Times' [GitHub page](https://github.com/nytimes/covid-19-data)
+
+##Graphing
+
+```{r}
+ggplot(texas_covid, aes(date, cases_per_ht)) +
+  geom_point()
+```
+
+
+
