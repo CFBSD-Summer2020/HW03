@@ -40,7 +40,7 @@ geom_line(aes(group=1, color="Daily Snowfall (Inch)", linetype="Daily Snowfall (
 #Add another line: z-score of daily snowfall 
 geom_line(aes(new_date_2, daily_snow_county_z, group=1, color="Z-Score of Daily Snowfall", linetype = "Z-Score of Daily Snowfall"), size=1) +
 #Add annotation of max snowfall and max z-score within each group
-geom_label(geom="text", x=45.5, y=33, aes(label = paste("Max Snowfall: ", max_snow, "Max Z-Score: ", max_z)), fill="orange", size=3) +
+geom_label(x=45.5, y=33, aes(label = paste("Max Snowfall: ", max_snow, "Max Z-Score: ", max_z)), fill="orange", size=3) +
 #Create a panel based on variable group_label, which indicates state, county, and year
 facet_wrap(~group_label) + 
 #Format x-axis
