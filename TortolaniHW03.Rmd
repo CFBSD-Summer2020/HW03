@@ -1,0 +1,50 @@
+---
+title: "HW03"
+author: "Ariana F. Tortolani"
+date: "7/20/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Description 
+
+For this assignment I will be using the COVID-19 data from the NYT's Github Repository to generate these figures.
+
+Below I am loading important libraries that will be useful in creating my figures.
+
+```{r load libraries, echo = TRUE, include=TRUE}
+library("ggplot2")
+library("magrittr")
+library("readr")
+library("dplyr")
+```
+
+## Import the Data
+
+I am using the us-states.cvs dataset from the NYT.  First I went to the [NYT Github Repository for COVID-19 Data](https://github.com/nytimes/covid-19-data).  I forked this repository and then downloaded the specific file I was interested in, *"us-states.csv"*.  After downloading this to my computer I then uploaded it back to my HW03 Github repository by clicking the "add file" button in github, then I pulled the change back down to RStudio to work with this file.
+
+QUESTION:  I was trying to find a way to add this document directly from one github repository to another (i.e. going directly from the NYT repo to my HW03 repo without having to download the file to my computer and reupload).  I was not able to find a good way to do this and was wondering if anyone else had?
+
+```{r data, echo=TRUE}
+all_states <- read.cvs("us-states.cvs", stringsAsFactors = FALSE)
+```
+
+##Graph 1
+
+Evaluating the prevalence of COVID-19 in Rhode Island.
+
+```{r}
+
+```
+
+
+##Graph 2
+
+Compare Rhode Island to Massachusetts.
+```{r}
+
+```
+
