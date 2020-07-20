@@ -3,8 +3,7 @@ HW03 covid
 Bei Wang
 July 19, 2020
 
-Covid-19 in the US
-------------------
+This dataset if from NYT about COVID-19 cases in the US from Feb2020 to July2020.
 
 ``` r
 #packages used 
@@ -28,8 +27,8 @@ library("dplyr")
 library("magrittr")
 ```
 
-Covid-19 in the US by states
-----------------------------
+Covid-19 in the US
+------------------
 
 ``` r
 #import datasets downloaded from NYT
@@ -57,6 +56,15 @@ national_caseplot
 ```
 
 ![](HW03-covid_files/figure-markdown_github/national_data-1.png)
+
+Covid-19 in the US by states
+----------------------------
+
+The way the graph is presented is not how I wanted it yet, and a few roadblocks for me to get graph I wanted:
+
+1.  I wanted to slice the dataset to only include top 10 states with the highest cases as of July 2020. I tried "subset()" but didnt work.
+
+2.  Using "geom\_text" allowed me to label each line, but there are too many of them. I didnt figure out how to just add one label to the end of the lines.
 
 ``` r
 #import datasets downloaded from NYT
