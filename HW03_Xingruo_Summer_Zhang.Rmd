@@ -1,0 +1,69 @@
+---
+title: "HW03_Xingruo_Summer_Zhang"
+author: "Summer Zhang"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r}
+# Load Packages
+library(ggplot2)
+library(readr)
+library(magrittr)
+library(tidyr)
+library(dplyr)
+
+# Read Data
+us <- read_csv("us.csv")
+states <- read_csv("us-states.csv")
+```
+
+```{r}
+head(states)
+```
+
+## Graph 1: How Caes in the Entire U.S. Grew
+```{r}
+# Graph the cases
+ggplot(us, aes(x = date, y = cases, linetype = "Cases", color = "Cases")) +
+  geom_line(size = 1.5) +
+  # Add a layer of deaths accordingly
+  geom_line(aes(x = date, y = deaths, linetype = "Deaths", color = "Deaths"), size = 1.5) +
+  # solid for cases, dashed for deaths
+  scale_linetype_manual(values = c("solid", "dotted")) + 
+  scale_color_manual(values = c('skyblue', 'tomato')) +
+  labs(color  = "", linetype = "", title = "COVID-19 Cases and Deaths in the U.S.") +
+  # Bolden and center the title
+  theme(plot.title = element_text(face = "bold", hjust = 0.5)) +
+  # Change the theme
+  theme_classic()
+```
+
+## Graph 2: How Cases and Deaths in Those States with Most Cases Grew
+```{r}
+# Select the 3 states that have the most cases up until 07/17
+# Order the states by cases on 07/17
+ordered_states <- states %>% 
+  filter(date == "2020-07-17") %>% 
+  arrange(desc(cases))
+# Get the names of the top 5 states
+top3_name <- ordered_states$state[1:3]
+# Select all the data of the top 5 states
+top3 <- states %>% 
+  filter(state %in% top3_name)
+
+# Graph the growth of cases in the 5 states
+ggplot(top3, aes(x = date, y = cases, color = state, linetype = "Cases")) +
+  geom_line(size = 1.3) +
+  # Graph the growth of deaths accordingly 
+  geom_line(aes(x = date, y = deaths, color = state, linetype = "Deaths"), size = 1.3) +
+  # solid for cases, dashed for deaths
+  scale_linetype_manual(values = c("solid", "dotted")) +
+  # Add a title
+  labs(title = "COVID-19 Cases and Deaths in California, Florida, and New York")+
+  # Bolden and center the title
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+  # Change the theme
+  theme_classic()
+```
+
