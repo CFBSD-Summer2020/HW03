@@ -1,31 +1,24 @@
----
-title: "HW03 Olivia Pura"
-output: github_document
----
+HW03 Olivia Pura
+================
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+To start, I’m loading in the ggplot2, readr, and dplyr packages.
 
-To start, I'm loading in the ggplot2, readr, and dplyr packages.
-
-```{r packages, warning=FALSE, message=FALSE, echo=TRUE}
+``` r
 library("ggplot2")
 library("readr")
 library("dplyr")
 ```
 
-I will be working with the NYT COVID-19 dataset, "us-states.csv". I forked this dataset from the NYT repository and uploaded them into my own.
-
-```{r data}
-state_data <- read.csv("us-states.csv", stringsAsFactors = FALSE)
-```
+I will be working with the NYT COVID-19 dataset, “us-states.csv”. I
+forked this dataset from the NYT repository and uploaded them into my
+own.
 
 ## Graph 1
 
-My first graph will evaluate the total cases and deaths over time in Illinois.
+My first graph will evaluate the total cases and deaths over time in
+Illinois.
 
-```{r graph1, echo=TRUE}
+``` r
 # filtering the dataset for Illinois data
 il_data <- filter(state_data, state == "Illinois")
 
@@ -75,11 +68,14 @@ ggplot(il_data) +
          panel.background = element_blank()) 
 ```
 
+![](HW03-Olivia-Pura_files/figure-gfm/graph1-1.png)<!-- -->
+
 ## Graph 2
 
-My second graph will evaluate the number of new cases each day, also in Illinois
+My second graph will evaluate the number of new cases each day, also in
+Illinois
 
-```{r graph2, echo=TRUE}
+``` r
 #created a new dataset with new variables for daily cases and daily deaths
 il_daily_data <- filter(state_data, state == "Illinois")
 il_daily_data$new_cases <- il_daily_data$cases - lag(il_daily_data$cases, 1)
@@ -117,3 +113,7 @@ ggplot(il_daily_data, mapping = aes(date, new_cases,
          axis.title.x= element_text(vjust = -1),
          panel.background = element_blank()) 
 ```
+
+    ## Warning: Removed 1 rows containing missing values (geom_point).
+
+![](HW03-Olivia-Pura_files/figure-gfm/graph2-1.png)<!-- -->
