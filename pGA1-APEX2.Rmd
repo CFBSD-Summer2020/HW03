@@ -1,0 +1,45 @@
+---
+title: "pGA1-APEX2"
+author: "Kelly O'Leary"
+date: "7/19/2020"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(readxl)
+Initial_velocity2 <- read_excel("Initial_velocity2.xls")
+
+ggplot(Initial_velocity2, aes(x = time, y = df, color = grp)) +
+  geom_point(aes(color = grp)) +
+  geom_smooth(se = F) +
+  labs(title="pGA1-APEX2 Guaiacol Oxidation - Initial Velocity", 
+       x="Time (seconds)",
+       y="Absorbance 470 nm") + 
+  scale_colour_discrete("[Guaiacol] uM",
+                        labels=c("400", "200", "100", "50", "25", "12.5", "0")) +
+  theme_classic() +
+   theme(plot.title = element_text(hjust=0.5)) 
+
+
+
+```
+
+
+
+```{r}
+library(readxl)
+MALDI <- read_excel("MALDI.xlsx")
+
+ggplot(MALDI, aes(x = mz, y = au, color = "red")) +
+  geom_line(aes(color = "red")) +
+  labs(title="pGA1-APEX2 - Mass Spectrum", 
+       x="m/z",
+       y="Normalized Intensity (au)") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust=0.5)) +
+  theme(legend.position = "none")
+  
+ 
+  
+```
