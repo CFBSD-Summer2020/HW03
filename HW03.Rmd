@@ -1,0 +1,144 @@
+---
+title: "HW03"
+author: "Laura Hunter"
+date: "7/19/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("ggplot2")
+library("gridExtra")
+```
+
+## Timing Score Plots
+
+In the [neuroeconomics lab](https://www.gottlieblab.com/) where I worked as a research technician, I created a project based on [this paper](https://9fabbb78-5b5b-4a1b-aeb0-b5443b6eac2f.filesusr.com/ugd/9cf124_28146e8d3fa5431baaa796c288f0724c.pdf). It involves two lotteries, wherein the participant needs to make a choice between one that has a high level of variability in reward size (e.g. you win 100 points or 200 points) and one that has a low level of variability in reward size (e.g. you win 140 points or 160 points).
+
+The details of the experimental design are not important for understanding the timing scores, however. Once our data collection (ongoing) is complete, we expect about 200 participants, so I am scoring each participants' performance in order to remove those that clearly misunderstood the task.
+
+The participants had a minimum of 600 milliseconds and a maximum of 10 seconds to make a decision. In the dataset I'm loading here, I have calculated each participant's ability to do this task within that timing window (number of trials with bad timing over total number of trials). Once I did that, I Z-Scored them to get a feel for what we should expect from participants. This is in the hopes of knowing which participants were "too bad" at the task (too positive/far to the right) and therefore need to be removed from our datapool.
+
+I wanted to create a visualization of this, separated by block (there are 4 blocks). Here it is!
+
+```{r Timing Scores}
+
+#Read in our CSV of data (pre-cleaned... in MATLAB)
+data_scoring <- read.csv("2lot_data_scoring.csv", stringsAsFactors = FALSE)
+
+#Pre-allocate color choices for aesthetic flexibility
+sd_color <- "blue" #color of standard deviation line
+mean_color <- "red" #color of mean line
+fill_color <- "green"
+mean_linetype <- "dashed" #linetype of mean line
+sd_linetype <- "dashed" #linetype of standard deviation line
+
+#Put data into lists so that each plot can be made in a loop
+block_list <- list()
+data_list <- list(data_scoring$obs_bad_timing, data_scoring$rep_bad_timing, data_scoring$int_bad_timing, data_scoring$gue_bad_timing)
+title_list <- list("Observe Block", "Repeat Observe Block", "Intervene Block", "Guess Block")
+
+#Create plots
+for(i in 1:length(data_list)){ #in a loop from 1 to the number of blocks, go through each block's data
+  block_list[[i]] <- local({ #save ggplot to this list
+    i <- i #make i local to limit variable scope within for loop
+    ggplot(data_scoring, aes(data_list[[i]])) + #plot current block's scores
+    geom_histogram(bins = 5, fill = fill_color) + #make histogram
+    labs(x = "Timing Scores", y = "Count", title = title_list[[i]], subtitle = "n = 25") + #labels
+    theme(plot.title = element_text(hjust = 0.5)) + #center title
+    geom_vline(xintercept = mean(data_list[[i]]), linetype = mean_linetype, color = mean_color) + #mean
+    geom_vline(xintercept = sd(data_list[[i]]), linetype = sd_linetype, color = sd_color) + #sd line
+    geom_vline(xintercept = -sd(data_list[[i]]), linetype = sd_linetype, color = sd_color)}) #sd line
+}
+
+#Plot the plots in a 2x2 grid!
+grid.arrange(block_list[[1]], block_list[[2]], block_list[[3]], block_list[[4]], nrow = 2)
+
+
+```
+
+
+## Other Acceptability Scores
+
+Timing isn't the only way a participant can perform poorly in this task. Other ways are:
+  * Directional bias (e.g. participant always chose the left lottery regardless of value)
+  * Incorrect guess (e.g. the participant never guessed correctly despite it being calcuable)
+  * Unrewarding interventions (e.g. the participant chose to make LESS money when given a clear choice)
+  
+Just like with the timing scores above, I calculated each participant's scores for these factors (e.g. calculated number of incorrect guesses over total number of trials) and then Z-scored them.
+
+Here's that visualization (much like the one above!):
+
+*(Note: I split the directional bias plots into the middle two blocks (guess and intervene) and outer two blocks (observe and observe-repeat) because they are mechanically different from each other)*
+
+
+```{r Other Acceptability Scores}
+#Read in our CSV of data (pre-cleaned... in MATLAB)
+data_scoring <- read.csv("2lot_data_scoring.csv", stringsAsFactors = FALSE)
+
+#Pre-allocate color choices for aesthetic flexibility
+sd_color <- "orange" #color of standard deviation line
+mean_color <- "green" #color of mean line
+fill_color <- "dodgerblue3"
+mean_linetype <- "dashed" #linetype of mean line
+sd_linetype <- "dashed" #linetype of standard deviation line
+
+#Put data into lists so that each plot can be made in a loop
+score_list <- list()
+data_list <- list(data_scoring$left_obs_rep, data_scoring$left_gue_int, data_scoring$incorrect_guess, data_scoring$low_intervene)
+title_list <- list("Observe Directional Bias", "Middle Directional Bias", "Incorrect Guess", "Low Intervene")
+x_label_list <- list("% Bias", "% Bias", "%Incorrect Guess", "% Low Choice")
+
+#Create plots
+for(i in 1:length(data_list)){ #in a loop from 1 to the number of blocks, go through each block's data
+  score_list[[i]] <- local({ #save ggplot to this list
+    i <- i #make i local to limit variable scope within for loop
+    ggplot(data_scoring, aes(data_list[[i]])) + #plot current block's scores
+    geom_histogram(bins = 5, fill = fill_color) + #make histogram
+    labs(x = x_label_list[[i]], y = "Count", title = title_list[[i]], subtitle = "n = 25") + #labels
+    theme(plot.title = element_text(hjust = 0.5)) + #center title
+    geom_vline(xintercept = mean(data_list[[i]]), linetype = mean_linetype, color = mean_color) + #mean
+    geom_vline(xintercept = sd(data_list[[i]]), linetype = sd_linetype, color = sd_color) + #sd line
+    geom_vline(xintercept = -sd(data_list[[i]]), linetype = sd_linetype, color = sd_color)}) #sd line
+}
+
+#Plot the plots in a 2x2 grid!
+grid.arrange(score_list[[1]], score_list[[2]], score_list[[3]], score_list[[4]], nrow = 2)
+
+
+```
+
+
+## Participant Choice
+
+I've been using the grid.arrange() function for the above because I was dealing with subplots of completely different data variables that I wanted displayed together because they have a similar purpose. I would, however, like to have the opportunity to play around with facets, so now I'm going to load in actual data from Subject 7 of this study.
+
+In this task, participants will receive one value from each lottery regardless of which they pick. In terms of earnings, it doesn't MATTER which they choose to look at (and learn the value of). Participants may choose the lottery with higher variability because it greater affects their knowledge of their earnings. Or they may choose to look at the one with a higher value (regardless of variability) because it's nice to see a big reward.
+
+I'm going to plot the percent of trials a participant chooses to look at the high variability lottery against the difference in expected values of the two lotteries.
+
+The **y-axis** is the percent of trials that the participant choose the lottery with more variation
+
+The **x-axis** is the expected value (middle of the range of values) of the high variation lottery minus that of the low variation lottery.
+
+I expect an S shaped curve if the participant chose based on expected value. There should be a left-ward shift if the participant took variation into account for similarly valued lottery trials.
+
+Each facet is a different block.
+
+Let's see what Subject 7 did:
+
+```{r Participant Choice}
+#Read in our CSV of data (pre-cleaned... in MATLAB)
+lottery_data <- read.csv("2lot_results_clean.csv", stringsAsFactors = FALSE)
+
+ggplot(lottery_data, aes(deltaEV,chose_hi_var/delta_count)) +
+  facet_grid(cols = vars(block)) +
+  geom_point(color = "dodgerblue2") +
+  geom_smooth(se = F, color = "orange") +
+  labs(x = "HighVar - LowVar", y = "% Chose High Var", title = "Subject 7") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+
+```
+
