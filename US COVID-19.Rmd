@@ -1,0 +1,77 @@
+---
+title: "US COVID-19"
+author: "Xing Yanfeng"
+date: "2020/7/20"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+This is graphs of **US COVID-19 for January to March 2020** data to show tendency of case and death increase. The **blue** points and lines show total **cases**, while the **red** ones show total **deaths**.
+
+```{r load library}
+library(ggplot2)
+library(readr)
+```
+
+### US COVID-19 data for January 2020
+
+
+```{r Jan}
+jan <- read_csv("us.csv", n_max = 11, col_types = "Dii") #importing data
+
+ggplot(jan, aes(x = date)) +
+  geom_point(aes(y = cases), color = "blue") +
+  geom_point(aes(y = deaths), color = "red") +
+  geom_line(aes(y = cases), color = "blue") +
+  geom_line(aes(y = deaths), color = "red") +
+  labs(title = "US COVID-19 data for January 2020",
+       x = "Date", 
+       y = "Cases/Deaths", 
+       caption = "Source: The New York Times") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(expand = expansion(c(0, 0.1), 0))
+```
+
+### US COVID-19 data for February 2020
+
+
+```{r Feb}
+feb <- read_delim("us.csv", delim = ",", skip = 12, n_max = 29, col_names = c("date", "cases", "deaths"), col_types = "Dii") #importing data
+
+ggplot(feb, aes(x = date)) +
+  geom_point(aes(y = cases), color = "blue") +
+  geom_point(aes(y = deaths), color = "red") +
+  geom_line(aes(y = cases), color = "blue") +
+  geom_line(aes(y = deaths), color = "red") +
+  labs(title = "US COVID-19 data for February 2020",
+       x = "Date", 
+       y = "Cases/Deaths", 
+       caption = "Source: The New York Times") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(expand = expansion(c(0, 0.1), 0))
+```
+
+### US COVID-19 data for March 2020
+
+
+```{r Mar}
+mar <- read_delim("us.csv", delim = ",", skip = 41, n_max = 31, col_names = c("date", "cases", "deaths"), col_types = "Dii") #importing data
+
+ggplot(mar, aes(x = date)) +
+  geom_point(aes(y = cases), color = "blue") +
+  geom_point(aes(y = deaths), color = "red") +
+  geom_line(aes(y = cases), color = "blue") +
+  geom_line(aes(y = deaths), color = "red") +
+  labs(title = "US COVID-19 data for March 2020",
+       x = "Date", 
+       y = "Cases/Deaths", 
+       caption = "Source: The New York Times") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(expand = expansion(c(0, 0.1), 0))
+```
