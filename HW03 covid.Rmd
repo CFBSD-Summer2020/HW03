@@ -1,0 +1,81 @@
+---
+title: "HW03 covid"
+author: "Bei Wang"
+date: "July 19, 2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This dataset if from NYT about COVID-19 cases in the US from Feb2020 to July2020.
+
+```{r}
+#packages used 
+
+library("ggplot2")
+library("dplyr")
+library("magrittr")
+```
+
+## Covid-19 in the US 
+
+```{r national_data}
+#import datasets downloaded from NYT
+national_data<- read.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv", header=TRUE)
+#transform "date" to date format
+national_data$date<- as.Date(national_data$date)
+
+#cases plot
+national_caseplot<- national_data %>% 
+  ggplot()+
+  geom_col(aes(x=date, y=cases), color="#69b3a2", fill="grey", alpha=0.7)+
+  geom_col(aes(x=date, y=deaths), color="red", fill="red", alpha=0.7)+
+  theme_minimal()+
+  #set axis
+  scale_x_date(date_labels="%b-%Y")+
+  scale_y_continuous(labels=scales::comma, breaks=seq(0, 4000000, by=500000))+
+  theme(axis.text.x=element_text(angle=40, hjust=1))+
+  #labels 
+  labs(x="", y="", title="COVID-19 Cases and Deaths in the United States", caption="Data from NYT \n Plot by @beiwang", subtitle="Number of Cases, Feb 2020-July 2020")+
+  #add labels of cases and deaths of July 19
+  annotate("text", x=as.Date("2020-07-01"), y=3784920, label="Cases as of July 19, \n3,784,920", size=3)+
+  annotate("text", x=as.Date("2020-07-09"), y=390373, label="Deaths as of July 19, \n140,373", size=3)
+  
+national_caseplot
+```
+
+## Covid-19 in the US by states
+
+The way the graph is presented is not how I wanted it yet, and a few roadblocks for me to get graph I wanted:
+
+1. I wanted to slice the dataset to only include top 10 states with the highest cases as of July 2020. I tried "subset()" but didnt work. 
+
+2. Using "geom_text" allowed me to label each line, but there are too many of them. I didnt figure out how to just add one label to the end of the lines. 
+
+```{r state_data} 
+
+#import datasets downloaded from NYT
+state_data<- read.csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv", header=TRUE)
+#transform "date" to date format
+state_data$date<- as.Date(state_data$date)
+state_data$state<- as.factor(state_data$state)
+
+#plot by states
+state_data %>% 
+  ggplot(aes(x=date, y=cases, color=state, label=state))+
+  geom_line(size=3, alpha=0.3)+
+  theme_minimal()+
+  theme(legend.position="none")+
+  #set axis
+  scale_x_date(date_labels="%b-%Y")+
+  scale_y_continuous(labels=scales::comma, breaks=seq(0, 400000, by=50000))+
+  theme(axis.text.x=element_text(angle=40, hjust=1))+
+  #labels
+  labs(x="", y="", title="Confirmed COVID-19 Cases in the U.S. (By State)", caption="Data from NYT \n Plot by @beiwang", subtitle="Feb 2020-July 2020")+
+  #add text to lines
+  geom_text(check_overlap = TRUE, size=3)
+  
+  
+```
