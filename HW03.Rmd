@@ -38,14 +38,16 @@ new_date_2 <- as.numeric(new_date)
 ggplot(snow, aes(new_date_2, daily_snow_county_inch)) +
 geom_line(aes(group=1, color="Daily Snowfall (Inch)", linetype="Daily Snowfall (Inch)"), size=1) +
 #Add another line: z-score of daily snowfall 
-geom_line(aes(new_date_2, daily_snow_county_z, group=1, color="Z-Score of Daily Snowfall", linetype = "Z-Score of Daily Snowfall"), size=1) +
+geom_line(aes(new_date_2, daily_snow_county_z, group=1, color="Z-Score of Daily Snowfall", 
+              linetype = "Z-Score of Daily Snowfall"), size=1) +
 #Add annotation of max snowfall and max z-score within each group
 geom_label(x=45.5, y=33, aes(label = paste("Max Snowfall: ", max_snow, "Max Z-Score: ", max_z)), fill="orange", size=3) +
 #Create a panel based on variable group_label, which indicates state, county, and year
 facet_wrap(~group_label) + 
 #Format x-axis
-scale_x_continuous(name="Date", breaks=seq(1, 91, by = 6), labels=c("01 Jan", "07 Jan", "13 Jan", "19 Jan", "25 Jan", "31 Jan", "06 Feb", "12 Feb", "18 Feb", "24 Feb", "01 Mar", "07 Mar", "13 Mar", "19 Mar",
-"25 Mar", "31 Mar")) +
+scale_x_continuous(name="Date", breaks=seq(1, 91, by = 6), labels=c("01 Jan", "07 Jan", "13 Jan", 
+"19 Jan", "25 Jan", "31 Jan", "06 Feb", "12 Feb", "18 Feb", "24 Feb", "01 Mar", "07 Mar", "13 Mar", 
+"19 Mar","25 Mar", "31 Mar")) +
 #Format y-axis
 scale_y_continuous(name="Daily Snowfall (Inch)", breaks = seq(0, 36, by = 5)) +
 #Create legend manually 
