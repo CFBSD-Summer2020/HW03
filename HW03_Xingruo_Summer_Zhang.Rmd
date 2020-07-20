@@ -2,7 +2,7 @@
 title: "HW03_Xingruo_Summer_Zhang"
 author: "Summer Zhang"
 date: "7/20/2020"
-output: html_document
+output: md_document
 ---
 
 ```{r}
@@ -62,7 +62,7 @@ ggplot(top3, aes(x = date, y = cases, color = state, linetype = "Cases")) +
   # Add a title
   labs(title = "COVID-19 Cases and Deaths in California, Florida, and New York")+
   # Bolden and center the title
-  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+  theme(plot.title = element_text(face = "bold", hjust = 0.5)) +
   # Change the theme
   theme_classic()
 ```
