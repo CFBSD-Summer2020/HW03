@@ -1,4 +1,14 @@
 # HW03
+
+Hello! This is my (Laura Hunter's) edit of the readMe with some explanation. Most of it is in the .Rmd file I wrote my code in, but here's some details:
+  * I chose to look at some data from my old neuroeconomics lab
+  * It's about curiosity for "information" vs curiosity for "liking"
+  * Curiosity for information is choosing to view something because it maximizes how much you know
+  * Curiosity for liking is choosing to view something because it's nice to look good (like big $$$)
+  * In my experiment, you get to pick between two lotteries. One obviously gives more information
+  * The fun is to see how much participants are willing to forego "liking" for "information"
+  
+
 ## Assignment
 Read in some data and graph something in R
 
