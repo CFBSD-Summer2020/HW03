@@ -1,0 +1,60 @@
+---
+title: "Nuclear Power Per Person in North and South America"
+author: "Luke Dyer"
+date: "7/19/2020"
+output:
+  md_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(readxl)
+library(ggplot2)
+```
+
+
+```{r data}
+##North American Countries
+nuc_data <- read_excel("nuclear_power_generation_per_person2.xlsx", "North")
+
+
+ggplot(data=nuc_data, sheet='North')+
+  geom_line(aes(Year,Canada,color='Canada'))+
+  geom_line(aes(Year,Mexico,color='Mexico'))+
+  geom_line(aes(Year,United,color='United States'))+
+  geom_line(aes(Year,Average,color='Average'), linetype='dashed')+
+  labs(y="Producation Per Person (kW)", title="North American Countries",legend.title="Country",color="Countries")
+
+
+```
+
+##South American Countries
+
+
+```{r}
+##South American Countries
+nuc_data <- read_excel("nuclear_power_generation_per_person2.xlsx", "South")
+
+
+ggplot(data=nuc_data)+
+  geom_line(aes(Year,Argentina, color='Argentina'))+
+  geom_line(aes(Year,Brazil, color='Brazil'))+
+  geom_line(aes(Year,Average, color='Average'), linetype='dashed')+
+  labs(y="Producation Per Person (kW)", title="South American Countries",color="Countries")
+```
+
+```{r}
+##Comparison
+nuc_data <- read_excel("nuclear_power_generation_per_person2.xlsx", "Combo")
+
+
+ggplot(data=nuc_data)+
+  geom_line(aes(Year,Naverage, color='North America'))+
+  geom_line(aes(Year,Saverage, color='South America'))+
+  labs(y="Producation Per Person (kW)", title="North vs South American Average",color="Continents")
+
+```
+
+All data garnered from [Gapminder](https://www.gapminder.org/data/)
