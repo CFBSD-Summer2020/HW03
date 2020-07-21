@@ -1,0 +1,71 @@
+---
+title: "casesC"
+author: "cazeredotseng"
+date: "7/20/2020"
+output: html_document
+---
+
+## R Markdown
+
+Setting work directory and separating variables from data file us-states.csv
+
+```{r setup}
+setwd("C:\\Users\\Cassandra\\Documents\\SummerR\\HW03")
+#install.packages("ggplot2")
+library(ggplot2)
+#install.packages("viridis")  # Install
+library("viridis")           # Load
+
+us_states <- read.csv(file="us-states.csv", head=TRUE, sep=",")
+
+state  <- us_states$state
+cases  <- us_states$cases
+date   <- us_states$date
+deaths <- us_states$deaths
+percent <- deaths/cases
+#comb    <- cbind(date, cases, state)
+
+```
+
+## Plot
+
+Plots for covid cases per state:
+
+```{r casedata, echo=FALSE}
+
+# ggplot(us_states, aes(date,cases,color=state,group=state))+
+#   geom_point()+
+#   scale_y_continuous( "Covid Cases (thousand)",
+#     breaks = c(0e+00, 1e+05, 2e+05, 3e+05, 4e+05),
+#     labels = c('0', '10', '20', '30', '40')
+#   )
+
+
+ggplot(us_states, aes(x=state, y=cases, fill=percent*100))+
+  geom_bar(
+    stat="identity",
+    position=position_dodge(),
+    color="black"
+  ) +
+  theme(
+    plot.title=element_text(hjust=0.5),
+    axis.text.x = element_text(angle = 90, size=10),
+    panel.grid.major=element_blank()
+  )+
+  scale_y_continuous( 
+    "Cases (1e5)",
+    breaks = c(0e+00, 1e+05, 2e+05, 3e+05, 4e+05),
+    labels = c('0', '1', '2', '3', '4')
+  )+
+  labs(x = "", fill = "Deaths/Cases %")+
+  scale_fill_gradient(low = "white", high = "blue")+
+  ggtitle("Covid Cases per State (1/21-7/19)")
+
+  
+
+
+
+
+```
+
+
