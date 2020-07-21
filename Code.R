@@ -1,4 +1,5 @@
-# The data I am working on is about the life expectancy from all contries from year 1800 to 2100, [Behavioral Risk Factor Surveillance System (BRFSS)](https://www.cdc.gov/brfss/about/index.htm)
+# The data I am working on is about the life expectancy from all contries from year 1800 to 2100, 
+#[Behavioral Risk Factor Surveillance System (BRFSS)](https://www.cdc.gov/brfss/about/index.htm)
 library(tidyverse)
 library(ggplot2)
 
@@ -24,6 +25,9 @@ colors <- c("China" = "red", "USA" = "blue")
 ggplot(new_life)+
   geom_point(aes(x = year, y = China, color = "China"))+
   geom_point(aes(x = year, y = USA, color = "USA"))+
-  labs(title = "Life Expectancy change", x = "Year", y = "Life Expectancy", color = "Legend")+
+  labs(title = "Life Expectancy Change", x = "Year", y = "Life Expectancy (age)", color = "Legend")+
+  theme(plot.title = element_text(hjust = 0.5))+
   scale_color_manual(values = colors)
+
+ggsave("life_expectancy.png", plot = last_plot(), scale = 1)
 
