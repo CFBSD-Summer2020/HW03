@@ -1,0 +1,86 @@
+---
+title: "HW3"
+author: "Angela Chun"
+date: "7/19/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load libraries, include=FALSE}
+library("ggplot2")
+library("tidyverse")
+library("lubridate")
+library("readxl")
+library(dplyr)
+library(tidyr)
+```
+
+# The Data
+
+This is a small portion of a data I made last year for my research on generating allergic airway inflammation mice models.
+We examined cellular phenotypes in the mice models of allergic asthma sensitized with different adjuvants.
+The aim of our study was to determine immunologic cellular characteristics in mouse asthma models induced by ovalbumin (OVA) and a variety of adjuvants. 
+
+The data shows the percentages of CD+ Th cells showing 4 different cytokines within lung, according to the adjuvants the mice were sensitized with.
+
+The adjuvants I used were:
+
+1. Ovalbumin (OVA)
+2. Lipopolysaccharide (LPS)
+3. Alhydrogel (Alum)
+4. Papain
+
+The cytoines of interests were:
+
+1. IL-4
+2. IL-5
+3. IFN-γ
+4. IL-17A
+
+Three mice (indicated by the numbers 1, 2, and 3) were used per adjuvant to generate a total of 12 mice models.
+
+# Exporting the excel file
+I used read_excel() from the "readxl" package.
+
+```{r export}
+Tsti_Data <- read_excel("Tsti Data.xlsx", sheet = 1)
+Tsti_Data
+
+```
+
+
+# The Graph
+
+I wanted  to display four separate graphs according to the cytokines the T cells were expressing
+
+- Used facet_wrap() to achieve this.
+
+I also wanted to group the mice models according to the adjuvants groups 
+- Decided to do this by color/fill.
+
+
+
+```{r graph}
+Tsti_Data %>%
+  gather(Tsti_Data, value, -Adjuvant) %>%
+  ggplot(aes(Adjuvant, value, fill = Adjuvant)) + 
+  geom_bar(stat = "identity") + 
+  
+  #Manually changed the colors so each adjuvant group would display the same color
+  
+  scale_fill_manual(values = c("darkturquoise", "darkturquoise", "darkturquoise", "brown1", "brown1", "brown1", "springgreen4", "springgreen4", "springgreen4", "orange", "orange", "orange")) + 
+  facet_wrap(~Tsti_Data) +
+  
+  #Changed the title and axis labels
+  
+  labs(title = "Percentage of intracellular cytokines among lung CD4+ Th cells of mice \nsensitized with different adjuvants", x = "Sensitization (Adjuvant)", y = "% in CD4+ T cells", subtitle = "Following PMA/ionomycin stimulation, CD4+ Th cells in lungs of mice sensitized \nwith different adjuvants were analyzed to evaluate their intracellular cytokine levels") + 
+  theme_bw() + 
+  
+  #The x axis text were overlapping, so fixed it by adjusting the angle and height and also applied the color scheme.
+  
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.7, color = c("darkturquoise", "darkturquoise", "darkturquoise", "brown1", "brown1", "brown1", "springgreen4", "springgreen4", "springgreen4", "orange", "orange", "orange"))) 
+
+```
