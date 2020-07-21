@@ -91,7 +91,8 @@ graphlogFC
 
 ```
 ```{r}
-ggplot(mydata, aes(x = logFC  , y = neglog10PValue)) + geom_point(size = 0.5) + scale_x_continuous( limits = c(-4, 4)) + scale_y_continuous(limits = c(0, 10)) + geom_text (data=graphlogFC, aes(x=logFC, y = neglog10PValue, label = GeneID), size = 3) #alright, my grand masterpiece. The ggplot function references directly to the mydata dataframe. I have the axis speficied, and for the geom_point function, I have my ideal scale. However, for the geom_text, it would be illegible to have every single dot labeled with the GeneID because there are over 6000 data points. I wanted to then only label the points that have a logFC less than -2, since those are the most interesting and sparse points where the text would be legible. 
+ggplot(mydata, aes(x = logFC  , y = neglog10PValue)) + geom_point(size = 0.5) + scale_x_continuous( limits = c(-4, 2)) + scale_y_continuous(limits = c(0, 10)) + geom_text (data=graphlogFC, aes(x=logFC, y = neglog10PValue, label = GeneID,  color = neglog10PValue), size = 3) + ggtitle("Hermetia illucens Localized Transcripts") + labs(y = "negative log10 PValue" , x = "logFC") + theme(legend.position = "none" , axis.line.x.bottom = element_line() , axis.line.y.left = element_line())
+#alright, my grand masterpiece. The ggplot function references directly to the mydata dataframe. I have the axis speficied, and for the geom_point function, I have my ideal scale. However, for the geom_text, it would be illegible to have every single dot labeled with the GeneID because there are over 6000 data points. I wanted to then only label the points that have a logFC less than -2, since those are the most interesting and sparse points where the text would be legible. 
 
 # I had to create a new dataframe using only a subsection of the original dataset containing the logFC <-2. You will see data=graphlogFC to tell the function to use the new dataframe. 
 ```
