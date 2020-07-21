@@ -27,8 +27,8 @@ Fluo_n = \\frac{Fluo - Fluo_{empty}}{Abs - Abs_{blank}}
 ")  
 
 where *Fluo* means fluorescence and *Abs* means absorption. *empty* are
-the wells that are innoculated with cells but are not supplemented with
-the inducer (IPTG here). *blank* are wells with only buffer. I used
+the wells innoculated with cells but are not supplemented with the
+inducer chemical(IPTG here). *blank* are wells with only buffer. I used
 *uncertainty propagation* to achieve the standard deviation of
 normalized fluorescence signal.
 
@@ -83,16 +83,17 @@ str(gfp)
 *RFP* stands for Red Fluorescence Protein, which represents the red Fluo
 signal. *GFP* ditto.
 
-## Step 3: Plot fluorescence signals against time
+## Step 2: Plot fluorescence signals against time
 
-After the spike of the inducer, the number of fluorescence in cells is
-expected to increase, until a plateau (a stationary phase) is hit.
+After the spike of the inducer, the number of fluorescence proteins in
+cells is expected to increase, until it hits a plateau (a stationary
+phase).
 
-Below are two separate graphs dealing with RFP signal and GFP signal. In
-the original design (see the dataframe structure above), I treated CP1,
-CP2, and CP3 as different columns, which refers to different designs of
-coupling sequences. In order to make faceted graphs, I used `rbind` to
-stack these columns into a new dataframe.
+Below are two separate graphs dealing with RFP signals and GFP signals.
+In the original design (see the dataframe structure above), I treated
+CP1, CP2, and CP3 as different columns, which refer to different designs
+of coupling sequences. In order to make faceted graphs, I used `rbind`
+to stack these columns into a new dataframe.
 
 ``` r
 # To make faceted graphs, CP1, CP2, CP3 columns will has to be merged
@@ -116,8 +117,10 @@ ggplot(cp_extract, aes(x = Time, y = Value, color = as.factor(Inducer))) +
   geom_point() +
   geom_line() +
   geom_errorbar(aes(ymin = Value - Std, ymax = Value + Std)) +
-  labs(color = TeX("Inducer\nconcentration/$\\mu$M")) +
-  facet_wrap(vars(CP), scale="free_y")
+  labs(color = TeX("Inducer\nconcentration/$\\mu$M"),
+       x = "Time/h", y = "Fluorescence/AU", title = "RFP vs time") +
+  facet_wrap(vars(CP), scale="free_y") +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 <img src="remake_files/figure-gfm/red fluo against time-1.png" width="100%" />
@@ -144,19 +147,21 @@ ggplot(cp_extract, aes(x = Time, y = Value, color = as.factor(Inducer))) +
   geom_point() +
   geom_line() +
   geom_errorbar(aes(ymin = Value - Std, ymax = Value + Std)) +
-  labs(color = TeX("Inducer\nconcentration/$\\mu$M")) +
-  facet_wrap(vars(CP), scale="free_y")
+  labs(color = TeX("Inducer\nconcentration/$\\mu$M"),
+       x = "Time/h", y = "Fluorescence/AU", title = "GFP vs time") +
+  facet_wrap(vars(CP), scale="free_y") +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 <img src="remake_files/figure-gfm/green fluo against time-1.png" width="100%" />
 
-Yes, as you can see, there are some quite discomfirting error bars at
+Yes, as you can see, there are some quite discomforting error bars at
 the beginning of the red fluorescence signal measurements. Also, this
 part the signal is lower than the empty group, which is likely to be an
 error in the measuring process. Thus, for the RFP measurement, we only
 used data sampled **after 4 hours**.
 
-Also, these plots are not the same ones with the old graphs from README.
+Also, these plots are not the same ones as the old graphs from README.
 My initial goal was to imitate those plots, but that would actually
 require more knowledge in data wrangling. For this assignment, I just
 plot these fluorescence signals against time.
