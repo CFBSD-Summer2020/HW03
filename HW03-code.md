@@ -8,8 +8,7 @@ Andrea Watson
 I am interested in using the New York Times’ publicly available COVID-19
 [data](https://github.com/nytimes/covid-19-data/tree/b229258ee82e415b33abde8c26fedd57ee48509a)
 to explore the number of cases and deaths in Cook County, Illinois in
-the context of the Illinois and Chicago executive and public health
-orders.
+the context of Illinois and Chicago executive and public health orders.
 
 ## Importing packages
 
@@ -18,17 +17,16 @@ library("dplyr")
 library("ggplot2")
 ```
 
-## Setting theme
+## Setting a theme
 
 ``` r
 my_theme <- theme_bw() + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5), 
+        plot.caption = element_text(hjust = 0, face= "italic"))
 theme_set(my_theme)
 ```
 
-## Analysis
-
-### Exploring data
+## Exploring data
 
 The NYTimes historical county data can be downloaded
 [here](https://github.com/nytimes/covid-19-data/blob/b229258ee82e415b33abde8c26fedd57ee48509a/us-counties.csv).
@@ -79,8 +77,7 @@ cook_county <- county_data %>%
 
 cook_county %>% ggplot(aes(date, cases)) +
   geom_line(aes(group = 1)) +
-  scale_x_date(date_labels = "%b %d", date_breaks = "1 month") +
-  theme(axis.text.x = element_text(angle = 45))
+  scale_x_date(date_labels = "%b %d", date_breaks = "1 month")
 ```
 
 ![](HW03-code_files/figure-gfm/cook%20county%20cases%20and%20deaths-1.png)<!-- -->
@@ -88,11 +85,12 @@ cook_county %>% ggplot(aes(date, cases)) +
 ``` r
 cook_county %>% ggplot(aes(date, deaths)) +
   geom_line(aes(group = 1)) +
-  scale_x_date(date_labels = "%b %d", date_breaks = "1 month") +
-  theme(axis.text.x = element_text(angle = 45))
+  scale_x_date(date_labels = "%b %d", date_breaks = "1 month")
 ```
 
 ![](HW03-code_files/figure-gfm/cook%20county%20cases%20and%20deaths-2.png)<!-- -->
+
+## Data analysis and presentation
 
 Alright, so that’s what the raw data looks like. Obviously the total
 number of cases and deaths will continue to go up over time. But what
@@ -140,44 +138,42 @@ health orders were implemented. Specifically:
 
 ``` r
 cook_county_rates %>% ggplot(aes(date, new_cases)) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-03-09")), color = "#00BFC4", size=1) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-03-26")), color = "#00BFC4", size=1) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-05-01")), color = "#00BFC4", size=1) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-06-03")), color = "#00BFC4", size=1) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-06-26")), color = "#00BFC4", size=1) +
   geom_line(aes(group = 1)) +
-  scale_x_date(date_labels = "%b %d", date_breaks = "1 month") +
-  theme(axis.text.x = element_text(angle = 45)) +
+  scale_x_date(date_labels = "%b %d", date_breaks = "months") +
   ggtitle("New COVID-19 Cases per Day in Cook County, Illinois") +
-  xlab("Date") + ylab("New Cases per Day") +
+  xlab("Date") + ylab("New Cases") +
   labs(caption = "Data from The New York Times, based on reports from state and local health agencies.") +
-  annotate(geom = "text", x = as.Date("2020-03-08"), y=2250, label = "Disaster\nProclamation", size = 3, hjust = 1) +
-  annotate(geom = "text", x = as.Date("2020-03-27"), y=2250, label = "Phase I", size = 3, hjust = 0) +
-  annotate(geom = "text", x = as.Date("2020-05-02"), y=2250, label = "Phase II", size = 3, hjust = 0) +
-  annotate(geom = "text", x = as.Date("2020-06-04"), y=2250, label = "Phase III", size = 3, hjust = 0) +
-  annotate(geom = "text", x = as.Date("2020-06-27"), y=2250, label = "Phase IV", size = 3, hjust = 0)
+  geom_vline(xintercept = as.numeric(as.Date("2020-03-09")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-03-26")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-05-01")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-06-03")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-06-26")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  annotate(geom = "text", x = as.Date("2020-03-09"), y=2250, label = "Disaster \nProclamation ", size = 3, hjust = 1, vjust = 1) +
+  annotate(geom = "text", x = as.Date("2020-03-26"), y=2250, label = " Phase I", size = 3, hjust = 0, vjust = 1) +
+  annotate(geom = "text", x = as.Date("2020-05-01"), y=2250, label = " Phase II", size = 3, hjust = 0, vjust = 1) +
+  annotate(geom = "text", x = as.Date("2020-06-03"), y=2250, label = " Phase III", size = 3, hjust = 0, vjust = 1) +
+  annotate(geom = "text", x = as.Date("2020-06-26"), y=2250, label = " Phase IV", size = 3, hjust = 0, vjust = 1)
 ```
 
 ![](HW03-code_files/figure-gfm/include%20phase%20info-1.png)<!-- -->
 
 ``` r
 cook_county_rates %>% ggplot(aes(date, new_deaths)) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-03-09")), color = "#00BFC4", size=1) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-03-26")), color = "#00BFC4", size=1) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-05-01")), color = "#00BFC4", size=1) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-06-03")), color = "#00BFC4", size=1) +
-  geom_vline(xintercept = as.numeric(as.Date("2020-06-26")), color = "#00BFC4", size=1) +
   geom_line(aes(group = 1)) +
-  scale_x_date(date_labels = "%b %d", date_breaks = "1 month") +
-  theme(axis.text.x = element_text(angle = 45)) +
+  scale_x_date(date_labels = "%b %d", date_breaks = "months") +
   ggtitle("New COVID-19 Deaths per Day in Cook County, Illinois") +
-  xlab("Date") + ylab("New Deaths per Day") +
+  xlab("Date") + ylab("New Deaths") +
   labs(caption = "Data from The New York Times, based on reports from state and local health agencies.") +
-  annotate(geom = "text", x = as.Date("2020-03-08"), y=150, label = "Disaster\nProclamation", size = 3, hjust = 1) +
-  annotate(geom = "text", x = as.Date("2020-03-27"), y=150, label = "Phase I", size = 3, hjust = 0) +
-  annotate(geom = "text", x = as.Date("2020-05-02"), y=150, label = "Phase II", size = 3, hjust = 0) +
-  annotate(geom = "text", x = as.Date("2020-06-04"), y=150, label = "Phase III", size = 3, hjust = 0) +
-  annotate(geom = "text", x = as.Date("2020-06-27"), y=150, label = "Phase IV", size = 3, hjust = 0)
+  geom_vline(xintercept = as.numeric(as.Date("2020-03-09")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-03-26")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-05-01")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-06-03")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  geom_vline(xintercept = as.numeric(as.Date("2020-06-26")), color = "#00BFC4", alpha = 0.5, size = 1) +
+  annotate(geom = "text", x = as.Date("2020-03-09"), y=150, label = "Disaster \nProclamation ", size = 3, hjust = 1, vjust = 1) +
+  annotate(geom = "text", x = as.Date("2020-03-26"), y=150, label = " Phase I", size = 3, hjust = 0, vjust = 1) +
+  annotate(geom = "text", x = as.Date("2020-05-01"), y=150, label = " Phase II", size = 3, hjust = 0, vjust = 1) +
+  annotate(geom = "text", x = as.Date("2020-06-03"), y=150, label = " Phase III", size = 3, hjust = 0, vjust = 1) +
+  annotate(geom = "text", x = as.Date("2020-06-26"), y=150, label = " Phase IV", size = 3, hjust = 0, vjust = 1)
 ```
 
 ![](HW03-code_files/figure-gfm/include%20phase%20info-2.png)<!-- -->
