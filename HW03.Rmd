@@ -1,0 +1,116 @@
+---
+title: "HW03"
+author: "Honorine Destain"
+date: "7/18/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(readxl)
+```
+
+## Data Source
+
+I used data regarding state crime rates, which can be found here: <https://corgis-edu.github.io/corgis/csv/state_crime/>. To narrow down the data, I focused only on crime rates within Illinois.
+
+The file can be found in the assignment file as [state_crime.csv](state_crime.csv). 
+
+```{r data import, include = FALSE}
+
+state_crime <- read.csv("state_crime.csv")
+
+```
+
+## Background
+
+In graphing violent crime rates in Illinois over time, I saw a peak in 1990 before a following sharp fall. I found a couple theories as to why this might be online, which I investigated through the following plots. 
+
+![Violent crime in Illinois.](graph1.png)
+
+```{r base plot, include=FALSE}
+
+base_plot <- ggplot(state_crime, aes(x = Year)) +
+  
+  # I saw I could use melt() to simplify this process but I wasn't sure I understood it very well
+  geom_line(aes(y = Data.Rates.Violent.All)) +
+  geom_line(aes(y = Data.Rates.Violent.Assault, color = "assault")) +
+  geom_line(aes(y = Data.Rates.Violent.Murder, color = "murder")) +
+  geom_line(aes(y = Data.Rates.Violent.Rape, color = "rape")) +
+  geom_line(aes(y = Data.Rates.Violent.Robbery, color = "robbery")) +
+  
+  # manually added legend
+  scale_color_manual(name = "Category", values = c(assault = "red", robbery = "orange", rape = "purple", murder = "blue")) +
+  labs(y = "Violent Crime Rates (per 100,000 people)", x = "Year") 
+
+  
+  base_plot +
+    ggtitle("Violent Crime in Illinois") 
+
+
+```
+
+
+## Economic Growth
+
+One theory is that economic growth after the 1990s contributed to a decrease in crime--the idea being that more people were employed and better off than before, and therefore less likely to resort to committing crimes. This theory predicts that crime rates should increase in times of economic crisis, and while this is true in 1969-1970 and and 1990-1991, this relationship is not observed in other recessions--even in the Great Recession of 2007-2009 preceded by the bursting of the housing bubble.
+
+![Crime rates and recession.](graph2.png)
+
+```{r Economic Growth, include=FALSE}
+
+base_plot +
+  annotate("rect", xmin = 1960, xmax = 1961, ymin = -25, ymax = 1050, color = "green", fill = "green", alpha = 0.25) +
+  annotate("rect", xmin = 1969, xmax = 1970, ymin = -25, ymax = 1050, color = "green", fill = "green", alpha = 0.25) +
+  annotate("rect", xmin = 1981, xmax = 1982, ymin = -25, ymax = 1050, color = "green", fill = "green", alpha = 0.25) +
+  annotate("rect", xmin = 1990, xmax = 1991, ymin = -25, ymax = 1050, color = "green", fill = "green", alpha = 0.25) +
+  annotate("rect", xmin = 2007, xmax = 2009, ymin = -25, ymax = 1050, color = "green", fill = "green", alpha = 0.25) +
+  ggtitle("Crime Rates and Recession")
+  
+```
+
+## The Donohue-Levitt Hypothesis
+
+In 2001, Steven Levitt (a University of Chicago economics professor!) and John Donohue (at Yale) suggested that legalization of abortion through _Roe v. Wade (1973)_ was the cause of the drop in crime rate. Because children that are insufficiently supported are more likely to cause crime, they argued, access to abortion reflected this in the drop in crime rate (at a lag of ~20 years, the time it would take for these children to grow up).
+
+Several criticisms have arisen following this hypothesis; Foote and Goetz argue that other crime-associated factors were not sufficiently controlled for in the analysis, and Shah and Ahman argued that laws against abortion do not actually reduce abortion occurrence.
+
+I was hoping to plot abortion rates to explore Shah and Ahman's arguments; unfortunately, the abortion statistics report of Illinois do not extend before 1995. <https://dph.illinois.gov/data-statistics/vital-statistics/abortion-statistics/archived-reports>.
+
+![The Donohue-Levitt Hypothesis Prediction.](graph3.png)
+
+```{r Donohue-Levitt, include=FALSE}
+
+roe_v_wade <- base_plot + 
+  geom_vline(xintercept = 1973, color = "green") +
+  annotate("text", x = 1973, y = 950, label = "Roe v. Wade, 1973") +
+  annotate("rect", xmin = 1996, xmax = 2013, ymin = -25, ymax = 950, color = "green", fill = "green", alpha = 0.25) +
+  annotate("text", x = 2005, y = 950, label = "Crime Rate Drop") +
+  ggtitle("The  Donohue-Levitt Hypothesis Prediction")
+
+roe_v_wade
+
+```
+
+
+## Clean Air Act
+
+_Roe v. Wade (1973)_ wasn't the only legislative change of the 70s to impact the next generation's population. Economist Jessica Reyes (at Amherst) points to the Clear Air Act of 1970, which prompted the removal of lead from gasoline, as a contributor to the drop in crime rate. Her hypothesis suggests that decreased lead exposure, which stunts intellectual growth, would cause the resulting generation to decrease acts of violent crime (once again, with a ~20 year lag).
+
+![The Clean Air Act Hypohtesis Prediction.](graph4.png)
+
+
+```{r Clean Air Act, include=FALSE}
+
+clean_air_act <- base_plot + 
+  geom_vline(xintercept = 1970, color = "green") +
+  annotate("text", x = 1973, y = 950, label = "Clean Air Act, 1970") +
+  annotate("rect", xmin = 1996, xmax = 2013, ymin = -25, ymax = 950, color = "green", fill = "green", alpha = 0.25) +
+  annotate("text", x = 2005, y = 950, label = "Clean Air Act, 1970") +
+  ggtitle("The Clean Air Act Hypothesis Prediction")
+
+clean_air_act
+
+```
+
