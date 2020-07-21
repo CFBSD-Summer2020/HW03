@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 We learnt from datacamp that barplot with errorbar doesn't show the distribution of individual data points, instead dot plot is more appropriate.
 
 My old plot is here: 
-![](figure-gfm/oldplot.png)<!-- -->
+![](barplot.png)<!-- -->
 
 ```{r }
 library(ggplot2)
@@ -30,4 +30,4 @@ ggplot(pd_agg_family, aes(Source, Abundance, color=Treatment,group=Treatment))+
     labs(x="dose",y="Outcome",legend="")+
     theme(legend.title =element_blank(),legend.text=element_blank(),panel.grid.major.y = element_blank())
 ```
-![](figure-gfm/dotplot.png)<!-- -->
+![](dot_plot.png)<!-- -->
