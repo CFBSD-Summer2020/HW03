@@ -1,4 +1,9 @@
 # HW03
+
+## Submission
+
+My R markdown file is [HW03.Rmd](HW03.Rmd).
+
 ## Assignment
 Read in some data and graph something in R
 
