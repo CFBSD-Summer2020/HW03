@@ -1,0 +1,118 @@
+---
+title: "Microtiter plate graphs remake"
+author: "Yujia Liu"
+date: "7/21/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## HW03: Microtiter plate graphs remake
+
+As is described in [Readme](README.md), the purpose of the project is to examine the expression of CDSes upstream and downstream the **coupling sequence**. The expression of the entire operon is regulated by the pLac promoter, which is induced by IPTG (Isopropyl β-D-1-thiogalactopyranoside).
+
+## Step 0: Data manipulation
+
+This step is done in Excel. The raw microtiter plate data comes in pure text, and contains **3 measurements**: fluorescence in the wavelength of green, fluorescence in the wavelength of red, and the absorption at 600 nm. We use the following equation to normalize the fluorescence signal:
+
+$$
+Fluo_n = \frac{Fluo - Fluo_empty}{Abs - Abs_blank}
+$$
+
+where *Fluo* means fluorescence and *Abs* means absorption. *empty* are the wells that are innoculated with cells but are not supplemented with the inducer (IPTG here). *blank* are wells with only buffer. I used *uncertainty propagation* to achieve the standard deviation of normalized fluorescence signal.
+
+## Step 1: import data from Excel
+
+First, load the packages:
+
+```{r load libraries, echo=TRUE}
+library(ggplot2)
+library(readxl)
+library(latex2exp)
+
+```
+
+Then, use `readxl` functions to read Excel data:
+
+```{r read excel, echo=TRUE}
+rfp <- read_excel("microtiter_data.xlsx",
+           col_types = rep("numeric", 8),
+           sheet = "RFP_processed")
+
+gfp <- read_excel("microtiter_data.xlsx",
+           col_types = rep("numeric", 8),
+           sheet = "GFP_processed")
+
+str(rfp)
+str(gfp)
+
+
+```
+
+*RFP* stands for Red Fluorescence Protein, which represents the red Fluo signal. *GFP* ditto.
+
+## Step 3: Plot fluorescence signals against time
+
+After the spike of the inducer, the number of fluorescence in cells is expected to increase, until a plateau (a stationary phase) is hit.
+
+Below are two separate graphs dealing with RFP signal and GFP signal. In the original design (see the dataframe structure above), I treated CP1, CP2, and CP3 as different columns, which refers to different designs of coupling sequences. In order to make faceted graphs, I used `rbind` to stack these columns into a new dataframe.
+
+```{r red fluo against time, echo=TRUE, out.width='100%'}
+# To make faceted graphs, CP1, CP2, CP3 columns will has to be merged
+nrow = nrow(rfp)
+
+cp1_extract <- rfp[, c("Time", "CP1", "CP1.std", "Inducer")]
+colnames(cp1_extract)[2:3] <- c("Value", "Std")
+cp1_extract$CP <- rep("CP1", nrow)
+
+cp2_extract <- rfp[, c("Time", "CP2", "CP2.std", "Inducer")]
+colnames(cp2_extract)[2:3] <- c("Value", "Std")
+cp2_extract$CP <- rep("CP2", nrow)
+
+cp3_extract <- rfp[, c("Time", "CP3", "CP3.std", "Inducer")]
+colnames(cp3_extract)[2:3] <- c("Value", "Std")
+cp3_extract$CP <- rep("CP3", nrow)
+
+cp_extract <- rbind(cp1_extract, cp2_extract, cp3_extract)
+
+ggplot(cp_extract, aes(x = Time, y = Value, color = as.factor(Inducer))) +
+  geom_point() +
+  geom_line() +
+  geom_errorbar(aes(ymin = Value - Std, ymax = Value + Std)) +
+  labs(color = TeX("Inducer\nconcentration/$\\mu$M")) +
+  facet_wrap(vars(CP), scale="free_y")
+
+```
+
+```{r green fluo against time, echo=TRUE, out.width='100%'}
+# To make faceted graphs, CP1, CP2, CP3 columns will has to be merged
+nrow = nrow(gfp)
+
+cp1_extract <- gfp[, c("Time", "CP1", "CP1.std", "Inducer")]
+colnames(cp1_extract)[2:3] <- c("Value", "Std")
+cp1_extract$CP <- rep("CP1", nrow)
+
+cp2_extract <- gfp[, c("Time", "CP2", "CP2.std", "Inducer")]
+colnames(cp2_extract)[2:3] <- c("Value", "Std")
+cp2_extract$CP <- rep("CP2", nrow)
+
+cp3_extract <- gfp[, c("Time", "CP3", "CP3.std", "Inducer")]
+colnames(cp3_extract)[2:3] <- c("Value", "Std")
+cp3_extract$CP <- rep("CP3", nrow)
+
+cp_extract <- rbind(cp1_extract, cp2_extract, cp3_extract)
+
+ggplot(cp_extract, aes(x = Time, y = Value, color = as.factor(Inducer))) +
+  geom_point() +
+  geom_line() +
+  geom_errorbar(aes(ymin = Value - Std, ymax = Value + Std)) +
+  labs(color = TeX("Inducer\nconcentration/$\\mu$M")) +
+  facet_wrap(vars(CP), scale="free_y")
+
+```
+
+Yes, as you can see, there are some quite discomfirting error bars at the beginning of the red fluorescence signal measurements. Also, this part the signal is lower than the empty group, which is likely to be an error in the measuring process. Thus, for the RFP measurement, we only used data sampled **after 4 hours**.
+
+Also, these plots are not the same ones with the old graphs from README. My initial goal was to imitate those plots, but that would actually require more knowledge in data wrangling. For this assignment, I just plot these fluorescence signals against time.
