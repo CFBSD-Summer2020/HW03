@@ -2,7 +2,9 @@
 
 ## Submission
 
-My R markdown file is [HW03.Rmd](HW03.Rmd).
+My code file is [HW03.Rmd](HW03.Rmd).
+
+The R markdown file is [HW03.Rmd](HW03.md)
 
 ## Assignment
 Read in some data and graph something in R
