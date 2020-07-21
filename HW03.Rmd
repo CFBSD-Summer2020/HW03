@@ -1,0 +1,53 @@
+---
+title: "HW03"
+author: "jerry lee"
+date: "7/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+library("ggplot2")
+```
+
+```{r}
+immune<-read.csv("immune.csv", col.names=c("type","Cd3e","Cd19","Cd14"))
+```
+
+```{r}
+ggplot(immune, aes(type,Cd19,fill=type))+
+  geom_boxplot()+
+  geom_jitter(size=0.1)+
+  annotate("rect", xmin=0.5, xmax=1.5, ymin=0, ymax=15, alpha=0.2)+
+  annotate("rect", xmin=6.5, xmax=7.5, ymin=0, ymax=15, alpha=0.2)+
+  annotate("text",x=4, y=12.5, label="Cd19 seems to be a
+good marker for B cells", size=3) +
+  guides(fill=guide_legend(ncol=2)) +
+  theme(axis.text.x = element_text(angle = 90,vjust=0.5),legend.position="none")+
+  labs(title="Boxplot of relative Cd19 expression among different mouse
+samples",x="Mouse sample",y="Relative Cd19")
+```
+
