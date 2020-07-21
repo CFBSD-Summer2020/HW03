@@ -3,8 +3,7 @@ title: "Nuclear Power Per Person in North and South America"
 author: "Luke Dyer"
 date: "7/19/2020"
 output:
-  html_document:
-    df_print: paged
+  md_document
 ---
 
 
