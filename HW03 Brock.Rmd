@@ -1,0 +1,25 @@
+---
+title: "COVID Mapping"
+author: "Brock Adams"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr) #reading rectangular text data
+library(ggplot2) #plotting data
+library(magrittr) #piping
+```
+
+```{r COVID Data import}
+COVID_url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv"
+COVID_data <- read_csv(url(COVID_url)) 
+```
+
+```{r COVID Data Plotting}
+COVID_data %>% 
+ggplot(aes(x = as.Date(date), y = deaths)) + geom_line(aes(color = state)) + 
+  scale_y_log10() + theme(legend.position = "none") + xlab("Date") + ylab("Deaths") + 
+  ggtitle("COVID-19 deaths by state over time")
+```
