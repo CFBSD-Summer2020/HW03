@@ -9,10 +9,6 @@
       geom_line(aes(Year,Average,color='Average'), linetype='dashed')+
       labs(y="Producation Per Person (kW)", title="North American Countries",legend.title="Country",color="Countries")
 
-    ## Warning: Removed 3 row(s) containing missing values (geom_path).
-
-    ## Warning: Removed 29 row(s) containing missing values (geom_path).
-
 ![](nuclear_power_generation_per_person_files/figure-markdown_strict/data-1.png)
 
 \#\#South American Countries
@@ -27,11 +23,6 @@
       geom_line(aes(Year,Average, color='Average'), linetype='dashed')+
       labs(y="Producation Per Person (kW)", title="South American Countries",color="Countries")
 
-    ## Warning: Removed 15 row(s) containing missing values (geom_path).
-
-    ## Warning: Removed 25 row(s) containing missing values (geom_path).
-
-    ## Warning: Removed 15 row(s) containing missing values (geom_path).
 
 ![](nuclear_power_generation_per_person_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 

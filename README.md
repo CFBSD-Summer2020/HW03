@@ -4,4 +4,4 @@
 
 #Let me know your thoughts.
 
-#Here is a [link](nuclear_power_generation_per_person.html) to the file!
+#Here is a [link](nuclear_power_generation_per_person.md) to the file!
