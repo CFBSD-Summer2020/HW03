@@ -1,0 +1,22 @@
+---
+title: "HW3"
+author: "Sherzod Tokamov"
+date: "7/20/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+angles <- read_csv("angles.csv", stringsAsFactors = FALSE) #read my csv file
+ggplot(angles, aes (Angle)) +
+  geom_histogram(binwidth = 10, color = "black", fill= "cyan")  +
+  coord_polar(start = pi) + #this will convert the histogram into polar coordinates with 180 degrees at 12 o'clock position
+  scale_x_continuous(limits = c(0, 360), breaks = c(270, 360, 90, 180))+ #breaks creates degrees label at 3, 6, 9, and 12 o'clock positions, respectively
+  xlab("Angular distribution of campalydia with respect to water flow")+
+  ylab("Frequency")
