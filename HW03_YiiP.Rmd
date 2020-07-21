@@ -1,0 +1,99 @@
+---
+title: "HW03"
+author: "Daniel Krochmal"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load libraries, echo = FALSE}
+library("ggplot2")
+library("magrittr")
+```
+
+## Purification of bacterial zinc transporter YiiP-antibody complex
+
+YiiP is a 70-kDa, dimeric bacterial zinc transporter. In this assay I attempted to purify YiiP in multicomponent complex that consists of:
+
+* YiiP with fusion partner and in a nanodisc
+* Fab1 - an antibody fragment that specifically recognizes YiiP's fusion partner
+* protein G mutant - that recognizes Fab1 with high affinity
+* Fab2 - another antibody fragment that recognizes Fab1-protein G complex, and contains a mutation preventing it from being recognized by another protein G)
+* nanobody - specific to Fab1 and Fab2
+
+This whole complex is intended for cryo-EM analysis. Although the structure of YiiP transporter has already been obtained with X-ray crystallography, it would be interesting to see if the whole Fab/nanobody/protein G part helps in the analysis of data collected with cryo-EM, by helping in correct orienting of the particles by the analysis software.
+
+The purification was successful, but not very efficient - three large peaks on the right correspond to different antibody complexes, but they miss YiiP protein. Much smaller peaks on the left correspond to the same complexes, but with YiiP being present.
+
+
+```{r load dataset and plot, echo = FALSE}
+
+#Load data and clip the dataset to only contain x values from 8 to 25 (x - elution volume and values from 0 to 8 ml correspond to column's void volume)
+yiip.df <- (
+  read.csv("yiip_size-exclusion.csv", header = TRUE, sep = ",") %>%
+    subset(vol > 8 & vol < 25)
+)
+
+#Generate ribbon plot, apply classic theme, edit plot and axis titles
+ggplot(data = yiip.df, aes(fill = complex, color = complex)) +
+  
+  geom_ribbon(aes(x = vol, ymin = 0, ymax = a280), alpha = 0.3) +
+  
+  theme_classic() +
+  
+    labs(
+      title = "Purification of YiiP-antibody complex by size exclusion chromatography",
+      subtitle = "Column: Superose 6 10/300 GL",
+      x = "Elution volume (ml)",
+      y = "A280 (mAu)"
+    ) +
+  
+  #Set tick intervals
+  scale_x_continuous(breaks = seq(0, 25, by = 5)) +
+  
+  #Set legend position, remove legend title, resize axis and legend text
+  theme(
+    legend.position = c(0.2, 0.8),
+    legend.title = element_blank(),
+    legend.text = element_text(size = 8),
+    #legend.background = element_rect(color = "black", size = 0.2),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10),
+    
+    #I like closed frames in graphs
+    panel.border = element_rect(color = "black", size = 1, fill = NA)
+    ) +
+  
+  #This chunk adds the annotation and the arrow to the small peaks on the left
+  annotate(geom = "text",
+           x = 12.5,
+           y = 19,
+           label = "Fab complexes \nwith YiiP target present") +
+  
+  annotate(geom = "curve",
+    x = 12.5,
+    y = 15,
+    xend = 13,
+    yend = 5,
+    curvature = -0.2,
+    size = 0.6,
+    arrow = arrow(length = unit(0.2, "cm"), type = "closed")) +
+  
+  #This chunk adds the annotation and the arrow to the large peaks on the right
+  annotate(geom = "text",
+           x = 21,
+           y = 40,
+           label = "Fab complexes \nwith YiiP target missing") +
+
+  annotate(geom = "curve",
+    x = 21,
+    y = 35,
+    xend = 19,
+    yend = 25,
+    curvature = -0.4,
+    size = 0.6,
+    arrow = arrow(length = unit(0.2, "cm"), type = "closed"))
+
+```
