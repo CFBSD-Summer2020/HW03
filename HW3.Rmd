@@ -1,0 +1,20 @@
+---
+title: "HW3"
+author: "Sherzod Tokamov"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+angles <- read_csv("angles.csv", stringsAsFactors = FALSE)
+ggplot(angles, aes (Angle)) +
+  geom_histogram(binwidth = 10, color = "black", fill= "cyan") +
+  coord_polar(start = pi) +
+  scale_x_continuous(limits = c(0, 360), breaks = c(270, 360, 90, 180))+
+  xlab("Angular distribution of campalydia with respect to water flow")+
+  ylab("Frequency")
