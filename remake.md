@@ -18,9 +18,13 @@ text, and contains **3 measurements**: fluorescence in the wavelength of
 green, fluorescence in the wavelength of red, and the absorption at 600
 nm. We use the following equation to normalize the fluorescence signal:
 
-\[
-Fluo_n = \frac{Fluo - Fluo_empty}{Abs - Abs_blank}
-\]
+  
+![
+Fluo\_n = \\frac{Fluo - Fluo\_{empty}}{Abs - Abs\_{blank}}
+](https://latex.codecogs.com/png.latex?%0AFluo_n%20%3D%20%5Cfrac%7BFluo%20-%20Fluo_%7Bempty%7D%7D%7BAbs%20-%20Abs_%7Bblank%7D%7D%0A
+"
+Fluo_n = \\frac{Fluo - Fluo_{empty}}{Abs - Abs_{blank}}
+")  
 
 where *Fluo* means fluorescence and *Abs* means absorption. *empty* are
 the wells that are innoculated with cells but are not supplemented with

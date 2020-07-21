@@ -2,7 +2,9 @@
 title: "Microtiter plate graphs remake"
 author: "Yujia Liu"
 date: "7/21/2020"
-output: github_document
+output: 
+  github_document:
+    pandoc_args: --webtex
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +20,7 @@ As is described in [Readme](README.md), the purpose of the project is to examine
 This step is done in Excel. The raw microtiter plate data comes in pure text, and contains **3 measurements**: fluorescence in the wavelength of green, fluorescence in the wavelength of red, and the absorption at 600 nm. We use the following equation to normalize the fluorescence signal:
 
 $$
-Fluo_n = \frac{Fluo - Fluo_empty}{Abs - Abs_blank}
+Fluo_n = \frac{Fluo - Fluo_{empty}}{Abs - Abs_{blank}}
 $$
 
 where *Fluo* means fluorescence and *Abs* means absorption. *empty* are the wells that are innoculated with cells but are not supplemented with the inducer (IPTG here). *blank* are wells with only buffer. I used *uncertainty propagation* to achieve the standard deviation of normalized fluorescence signal.
