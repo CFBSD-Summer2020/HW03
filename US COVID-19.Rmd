@@ -1,0 +1,47 @@
+---
+title: "US COVID-19"
+author: "Xing Yanfeng"
+date: "2020/7/20"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+This is graphs of **US COVID-19 for 2020** data to show tendency of case and death increase. Data were downloaded from [*The New York Times*](https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html). 
+
+```{r load library}
+library(ggplot2)
+library(readr)
+```
+
+### US COVID-19 data for 2020
+
+
+```{r plotting}
+#importing data
+us_data <- read_csv("us.csv", col_types = "Dii") 
+
+#plotting data
+ggplot(us_data, aes(x = date)) +
+  geom_col(aes(y = cases), color = "#0080FF", fill = "#0080FF", alpha = 0.5) +
+  geom_col(aes(y = deaths), color = "red", fill = "red", alpha = 0.5) +
+#adding title and caption
+  labs(title = "US COVID-19 data for 2020",
+       x = "Date", 
+       y = "Total Cases/Deaths", 
+       caption = "Source: The New York Times") +
+#setting theme
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+#setting scales
+  scale_y_continuous(limits = c(0, 3800000), breaks =  seq(0, 3800000, by = 500000)) +
+  scale_x_date(date_labels = "%m/%d") +
+#adding legends
+  annotate("rect", xmin = as.Date("2020-02-01"), xmax = as.Date("2020-03-17"), ymin = 2850000, ymax = 3450000, fill = "grey", alpha = 0.6) + #legend background
+  annotate("text", x = as.Date("2020-03-03"), y = 3300000, label = "Cases") + 
+  annotate("text", x = as.Date("2020-03-04"), y = 3000000, label = "Deaths") + #legend text
+  annotate("rect", xmin = as.Date("2020-02-05"), xmax = as.Date("2020-02-20"), ymin = 3200000, ymax =  3400000, fill = "#0080FF", color = "#0080FF", alpha = 0.5) +
+  annotate("rect", xmin = as.Date("2020-02-05"), xmax = as.Date("2020-02-20"), ymin = 2900000, ymax = 3100000, fill = "red", color = "red", alpha = 0.5) #legend key
+```
