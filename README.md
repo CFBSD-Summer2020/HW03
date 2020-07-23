@@ -3,7 +3,7 @@
 Read in some data and graph something in R
 
 In my field, we need to be able to quantitatively compare bone morphology between species. I collected landmark data from the right scapulae (shoulder bones) of five different ape species with very different locomotor modes. 
-![Image of scapular landmarks](Labled Scapula Landmark figure.png)
+![Image of scapular landmarks](SCA_landmarks.png)
 
 The purpose of my comparison is to see if scapular morphology can separate species by their distinctive locomotor behaviors. You should hopefully be able to see in my graph that shoulder morphology seems to separate species by this behavior very well, and it will take further investigation to determine which parts of the bone hold this functionally significant information.
 ![PCA plot](Hannah_plot.png)
