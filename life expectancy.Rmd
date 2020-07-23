@@ -1,30 +1,59 @@
-# The data I am working on is about the life expectancy from all contries from year 1800 to 2100, 
-#[Behavioral Risk Factor Surveillance System (BRFSS)](https://www.cdc.gov/brfss/about/index.htm)
+---
+title: "Chufan HW3-life expectancy rmd"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+The data I am working on is about the life expectancy from all contries from year 1800 to 2100, 
+[Behavioral Risk Factor Surveillance System (BRFSS)](https://www.cdc.gov/brfss/about/index.htm)
+
+```{r message = FALSE,warning = FALSE}
 library(tidyverse)
 library(ggplot2)
+```
 
-#import and take a look at the data
+Import and take a look at the data
+
+```{r}
 life <- read.csv("life_expectancy_years.csv", header = TRUE, stringsAsFactors = FALSE, check.names = FALSE)
 head(life)
+```
 
-# modify the dataset structure
+Modify the dataset structure
+```{r}
 rownames(life) <- life[,1]
 life$country <- NULL
+```
 
-# Then, I would like to look at the life expactancy trend for China from year 1800 to 2100
+Then, I would like to look at the life expactancy trend for China from year 1800 to 2100
+
+```{r}
 year <- colnames(life)
 year <- as.numeric(year)
 China <- as.numeric(life[c("China"),])
+```
 
-# Then, I would like to look at the life expactancy trend for United States from year 1800 to 2100
+Then, I would like to look at the life expactancy trend for United States from year 1800 to 2100
+
+```{r}
 year <- colnames(life)
 year <- as.numeric(year)
 USA <- as.numeric(life[c("United States"),])
+```
 
-#draw the plot
+Combine the subsets into a new table, and esier to draw plots from
+```{r}
 new_life <- data.frame(year, China, USA)
-colors <- c("China" = "red", "USA" = "blue")
+head(new_life)
+```
 
+Draw the plot
+```{r}
+colors <- c("China" = "red", "USA" = "blue")
 ggplot(new_life)+
   geom_point(aes(x = year, y = China, color = "China"))+
   geom_point(aes(x = year, y = USA, color = "USA"))+
@@ -33,6 +62,4 @@ ggplot(new_life)+
   scale_color_manual(values = colors)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-
-ggsave("life_expectancy.png", plot = last_plot(), scale = 1)
-
+```
