@@ -2,7 +2,7 @@
 title: "Covid Data Import and Graph"
 author: "Patrick Cantwell"
 date: "7/20/2020"
-output: html_document
+output: md_document
 ---
 
 ```{r packages, include=FALSE}
