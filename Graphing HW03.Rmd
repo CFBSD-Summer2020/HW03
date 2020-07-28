@@ -1,0 +1,36 @@
+---
+title: "Thea's graph"
+author: "Althea Bock-Hughes"
+date: "7/27/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+install.packages("readxl")
+library(readxl)
+library(ggplot2)
+
+
+```
+
+
+
+```{r ELISA}
+ELISA <- read_excel("Example ELISA data.xlsx", sheet = "ratio")
+
+Names(ELISA)[4] <- "Ratio"
+
+summary(ELISA)
+```
+
+## Including Plots
+
+
+
+```{r pressure, echo=FALSE}
+ggplot(ELISA, aes(x=Sample, y=Ratio)) + geom_bar(stat="identity")
+```
+
+
