@@ -1,0 +1,99 @@
+---
+title: "HW03"
+output: github_document
+---
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE)
+
+```
+
+
+
+```{r load libraries, echo = TRUE, include=TRUE}
+
+library("ggplot2")
+library("magrittr") #so I can do some piping
+
+
+```
+```{r}
+mydata <- read.csv("Z:\\Labserver\\Personal_Folders\\Daniel Sanchez\\Hermetia\\Hermetia Anterior Determinant candidates.csv" , header = TRUE)
+
+mydata <- mydata[c(1:7)] #this was to get rid of the last column that was for miscellaneous notes ; not necessary for the plotting
+
+mydata <- mydata[complete.cases(mydata), ] #the .csv file I uploaded had blank rows between every other row. I did not like that, so I searched Google on how to get rid of blank rows (that also yielded "NA" values in their corresponding columns). I found this one line solution that was easy. 
+
+
+```
+
+```{r}
+Pvalue <- mydata["PValue"]
+
+log10PValue = log10(Pvalue)
+
+neglog10PValue = -1* log10PValue #in the graph I am attempting to recreate, the y-axis was "negative log10 of PValue" ; in my.csv file, the colummn and values are "PValue" and postiive (and not yet logged). I made the variable Pvalue as a vector of the values in the column "PValue" , and then took the log10 of it of that vector, and the multiplied that new vector by -1.
+names(neglog10PValue)[names(neglog10PValue) == "PValue"] <- "neglog10PValue"
+
+neglog10PValue #sanity check that I have a list of 1 variable and the values are similar to the scaling in my ultimate graph
+
+# cbind(mydata, neglog10PValue) #added new column to the dataset with this new vector ; OLD WAY
+
+mydata[, "neglog10PValue"] <- neglog10PValue # I was running into problems with adding the column. When I did the previous way above, I would get two columns added, one a data frame nd the other dbl. It made plotting troublesome because by default it would think to use the dataframe character column and it cannot plot that. This was I was able to get a unique column name with the values I wanted.
+
+mydata
+
+#unsure of my column names and therefore unable to plot correctly in future chunk; sanity check here
+
+colnames(mydata)
+
+```
+```{r}
+newlogFC <- mydata[c(1, 3, 8)] #created this vector with GeneID, logFC and neglog10PValue to put through a Boolean statement
+
+newlogFC
+
+lablogFC <- newlogFC < -2 #determine which logFC values are less than -2 because those are the GeneID's I want labeled on the graph
+
+lablogFC
+
+idx <- which(apply(lablogFC, 1, any)) #searched on Google, took me a while to find the answer. Initially I was doing "graphlogFC = newlogFC[lablogFC]"
+
+#However, this was only giving me vector with the values of "logFC" and nothing more , therefore being unable to plot. I found this solution and saw the example had what I was searching: a way to get organize the information and capture one TRUE statement. I used the apply function, the which function tells me which rows meet the conditions, I assigned those row numbers (indices) to the variable idx
+
+idx #proof of sanity
+
+graphlogFC <- newlogFC[idx, ] #I was initially subsetting the idx to lablogFC, but that is a Boolean vector (al TRUE and FALSE values, which doesn't serve as a good dataframe to the ggplot).I then realized I need the subest of the original vector with all the variables intact , the newlogFC dataframe. viola
+
+graphlogFC
+
+```
+```{r}
+ggplot(mydata, aes(x = logFC  , y = neglog10PValue)) + geom_point(size = 0.5) + scale_x_continuous( limits = c(-4, 2)) + scale_y_continuous(limits = c(0, 10)) + geom_text (data=graphlogFC, aes(x=logFC, y = neglog10PValue, label = GeneID,  color = neglog10PValue), size = 3) + ggtitle("Hermetia illucens Localized Transcripts") + labs(y = "negative log10 PValue" , x = "logFC") + theme(legend.position = "none" , axis.line.x.bottom = element_line() , axis.line.y.left = element_line())
+#alright, my grand masterpiece. The ggplot function references directly to the mydata dataframe. I have the axis speficied, and for the geom_point function, I have my ideal scale. However, for the geom_text, it would be illegible to have every single dot labeled with the GeneID because there are over 6000 data points. I wanted to then only label the points that have a logFC less than -2, since those are the most interesting and sparse points where the text would be legible. 
+
+# I had to create a new dataframe using only a subsection of the original dataset containing the logFC <-2. You will see data=graphlogFC to tell the function to use the new dataframe. 
+```
+

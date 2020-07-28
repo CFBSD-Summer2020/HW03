@@ -1,3 +1,4 @@
+---
 # HW03
 ## Assignment
 Read in some data and graph something in R
@@ -34,3 +35,13 @@ Idea #2: There are a ton of statistics on COVID cases and the increase over time
 Idea #3: Gapminder is a common dataset for students to explore [here](https://www.gapminder.org/data/). It has data on countries. E.g. wealth, child mortality, access to electricity, etc. and the data may suprise you. They even made a [TED talk about it](https://www.gapminder.org/ignorance/)
 
 Idea #4: Explore [some census data](https://www.census.gov/data/datasets.html) or some survey data from the CDC. The CDC conducts 2 annual surveys the [Behavioral Risk Factor Surveillance System (BRFSS)](https://www.cdc.gov/brfss/about/index.htm) and [National Health and Nutrition Examination Survey (NHANES)](https://www.cdc.gov/nchs/nhanes/about_nhanes.htm). The BRFSS is conducted as a yearly phone survey of 400,000 adults, with data going back to 1995. The NHANES is unique in that it has a physical examination portion instead of self-reported data, but because of this, it only contains data on 5,000 people per year. Both are great potential datasets for those interested in health as the CDC uses this data to calculate prevelance rates on things from happiness to smoking to obesity. (These data might not be in the best format for graphing and will likely require some formatting to be able to plot in ggplot).
+
+
+##**Daniel Sanchez**
+
+My goal for the assignment was to recreate a volcano plot used by a graduate student in the lab. We have Excel data sheets with various genes sort by log Fold Change, PValue, and determining the localization of transcripts in the bisected embryos that were sequenced. I decided to play with a new-ish dataset, but below is an example of the type of graph I am looking to produce: 
+
+
+
+<embed src="Z:\\Labserver\\Sequence Data\\Transcriptomes\\AP_screens\\2014_Clogmia_albipunctata\\100bp_pe_sequencing_AP_Clogmia\\RNA-seq Analysis Clogmia\\volcano_plot_Clogmia_albipunctata_pe_only_AvsP_03-30-17.pdf" type="application/pdf">
+---
