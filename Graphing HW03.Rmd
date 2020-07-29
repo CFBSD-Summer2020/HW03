@@ -1,0 +1,36 @@
+---
+title: "Thea's graph"
+author: "Althea Bock-Hughes"
+date: "7/27/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(ggplot2)
+
+
+```
+## my original plot 
+
+[My Graph](example graph.png)
+
+
+```{r ELISA}
+ELISA <- read_excel("Example ELISA data.xlsx", sheet = "Ratio")
+
+names(ELISA)[4] <- "Ratio"
+
+summary(ELISA)
+```
+
+## My Plot Recreation 
+
+
+
+```{r pressure, echo=FALSE}
+ggplot(ELISA, aes(x=Sample, y=Ratio)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
