@@ -7,14 +7,14 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
-install.packages("readxl")
 library(readxl)
 library(ggplot2)
 
 
 ```
+## my original plot 
 
+[My Graph](example graph.png)
 
 
 ```{r ELISA}
@@ -25,7 +25,7 @@ names(ELISA)[4] <- "Ratio"
 summary(ELISA)
 ```
 
-## Including Plots
+## My Plot Recreation 
 
 
 
