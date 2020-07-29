@@ -18,9 +18,9 @@ library(ggplot2)
 
 
 ```{r ELISA}
-ELISA <- read_excel("Example ELISA data.xlsx", sheet = "ratio")
+ELISA <- read_excel("Example ELISA data.xlsx", sheet = "Ratio")
 
-Names(ELISA)[4] <- "Ratio"
+names(ELISA)[4] <- "Ratio"
 
 summary(ELISA)
 ```
@@ -30,7 +30,7 @@ summary(ELISA)
 
 
 ```{r pressure, echo=FALSE}
-ggplot(ELISA, aes(x=Sample, y=Ratio)) + geom_bar(stat="identity")
+ggplot(ELISA, aes(x=Sample, y=Ratio)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
 
